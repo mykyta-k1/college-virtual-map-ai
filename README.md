@@ -28,7 +28,6 @@ college-map/
 │
 ├── tailwind.config.js           # Налаштування стилів
 └── vite.config.ts               # Налаштування збірки та PWA
-
 ```
 
 ---
@@ -72,3 +71,42 @@ college-map/
 * Розклад дзвінків.
 * Інструкції з підключення до Wi-Fi.
 * Розташування деканату та інших ключових точок.
+
+```ts
+// Типи зведені до логічних груп.
+// Всі "гендерні" чи специфічні особливості можна винести в назву чи опис.
+export type RoomType = 
+  | 'classroom'   // Аудиторії
+  | 'office'      // Службові (деканат, кафедра)
+  | 'wc'          // Туалети (всі)
+  | 'stairs'      // Сходи
+  | 'elevator'    // Ліфт
+  | 'food'        // Їдальня, буфет
+  | 'utility'     // Господарські приміщення
+  | 'hall';       // Коридор, хол
+
+export interface FloorRoom {
+    id: string;          // Унікальний ID (збігається з ID в SVG)
+    label: string;       // "301", "Бухгалтерія", "WC"
+    
+    type: RoomType;      // Для іконки та кольору на карті
+    
+    description?: string;// Офіційна назва ("Кабінет інформатики")
+    note?: string;       // Народна примітка ("Тут ксерокс")
+    
+    keywords?: string[]; // ["друк", "старостат", "чоловічий"]
+    staff?: string[];    // ["Коваленко А.А."]
+
+    // ЗВ'ЯЗОК З 360:
+    // Посилаємось на ключ в об'єкті panoramaTourConfig.scenes
+    // Наприклад: 'scene_1'
+    panoramaSceneId?: string; 
+}
+
+export interface FloorData {
+    id: number;
+    label: string;
+    svgUrl: string;
+    rooms: FloorRoom[];
+}
+```
