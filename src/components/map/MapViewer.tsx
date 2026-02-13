@@ -116,68 +116,66 @@ export default function MapViewer({ floor, allFloors, onFloorChange, onSearch: p
     };
 
     const handleMapClick = (e: React.MouseEvent) => {
-        let target = e.target as Element;
-        // Traverse up to find a matching ID within the SVG
-        while (target && target.tagName !== "svg" && target !== e.currentTarget) {
-            if (target.id) {
-                const room = floor.rooms.find((r) => r.id === target.id);
-                if (room) {
-                    const searchableRoom = { ...room, floorId: floor.id };
-                    setSelectedRoom(searchableRoom);
-                    setIsSidebarOpen(true);
-                    return;
-                }
+    let target = e.target as Element;
+    
+    while (target && target.tagName !== "svg" && target !== e.currentTarget) {
+        if (target.id) {
+            // Очищаємо ID від можливих префіксів (якщо ви клікнули на текст або фон кружечка)
+            const cleanId = target.id.replace('bg_', '').replace('text_', '');
+            
+            // 1. Точний збіг
+            let room = floor.rooms.find((r) => r.id === cleanId);
+            
+            // 2. Збіг по закінченню (наприклад "r1-301" закінчується на "301")
+            if (!room) {
+                room = floor.rooms.find((r) => r.id.endsWith(cleanId));
             }
-            target = target.parentElement as Element;
+
+            if (room) {
+                const searchableRoom = { ...room, floorId: floor.id };
+                setSelectedRoom(searchableRoom);
+                setIsSidebarOpen(true);
+                return;
+            }
         }
-        // If clicked on empty space (not a room), close sidebar?
-        // Optional: setIsSidebarOpen(false);
-    };
+        target = target.parentElement as Element;
+    }
+};
 
     const hasResults = results.length > 0;
     const hasQuery = searchQuery.trim().length > 0;
     const isError = hasQuery && !hasResults;
 
-    // Generate dynamic styles for highlighted rooms
     const highlightStyles = useMemo(() => {
-        let styles = "";
+    let styles = "";
 
-        // 1. Search Results Highlight (Green, Pulse)
-        if (hasResults) {
-            styles += results.map(r => `
-            #${r.item.id} {
-                fill: #22c55e !important; /* green-500 */
-                stroke: #15803d !important; /* green-700 */
+    // 1. Підсвічування результатів пошуку (Зелений)
+    if (hasResults) {
+        styles += results.map(r => `
+        [id="${r.item.id}"] {
+            fill: #22c55e !important; 
+            stroke: #22c55e !important; 
+            stroke-width: 3px !important;
+            opacity: 1 !important;
+            animation: pulse-room 2s infinite ease-in-out;
+        }
+    `).join("\n");
+    }
+
+    // 2. Підсвічування вибраної кімнати (Блакитний)
+    if (selectedRoom) {
+        styles += `
+            [id="${selectedRoom.id}"] {
+                fill: #0ea5e9 !important; 
+                stroke: #0ea5e9 !important; 
                 stroke-width: 3px !important;
                 opacity: 1 !important;
-                animation: pulse-room 2s infinite ease-in-out;
             }
-            #${r.item.id} * {
-                fill: #22c55e !important;
-                animation: pulse-room 2s infinite ease-in-out;
-            }
-        `).join("\n");
-        }
+        `;
+    }
 
-        // 2. Secondary Highlight (Manual Selection - Blue/Cyan)
-        // Only if selectedRoom is set and NOT currently the sole search result (optional logic, but let's just layer it)
-        // If a room is selected via click, we want to show it clearly.
-        if (selectedRoom) {
-            styles += `
-                #${selectedRoom.id} {
-                    fill: #0ea5e9 !important; /* sky-500 */
-                    stroke: #0369a1 !important; /* sky-700 */
-                    stroke-width: 3px !important;
-                    opacity: 1 !important;
-                }
-                #${selectedRoom.id} * {
-                    fill: #0ea5e9 !important;
-                }
-            `;
-        }
-
-        return styles;
-    }, [results, hasResults, selectedRoom]);
+    return styles;
+}, [results, hasResults, selectedRoom]);
 
     return (
         <div id="map-root" className="relative w-full h-full bg-dot-pattern overflow-hidden group select-none">
@@ -185,7 +183,7 @@ export default function MapViewer({ floor, allFloors, onFloorChange, onSearch: p
             <style>
                 {`
                     /* Cursor Pointer for all rooms (Scoped to Map Root to avoid Radix conflicts) */
-                    #map-root [id^="r"] {
+                    #map-root [id^="r"], #map-root g[id] {
                         cursor: pointer !important;
                         transition: fill 0.2s ease;
                     }

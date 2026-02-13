@@ -150,8 +150,14 @@ export const floorsConfig: FloorData[] = [
                 keywords: ["кава", "їжа", "булочки", "вода"],
                 note: "Працює до 16:00"
             },
+            {
+                id: "r1-entrance",
+                label: "Вхід",
+                type: "hall",
+                description: "Вхід в зону",
+                keywords: ["кава", "їжа", "булочки", "вода"]
+            },
 
-            // --- Технічні --- (також можна додати головний вхід)
             { id: "r1-stairs-1", label: "Сходи (Центральні)", type: "stairs", keywords: ["вгору", "2 поверх"] },
             { id: "r1-stairs-2", label: "Сходи (Запасні)", type: "stairs", keywords: ["вихід"] }
         ]
