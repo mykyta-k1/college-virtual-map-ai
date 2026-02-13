@@ -22,7 +22,7 @@ const panoramaTourConfig: PanoramaTourConfig = {
             type: 'equirectangular',
             // minPitch: -5,
             // maxPitch: 1,
-            panorama: '/panoramas/scene_1.jpg',
+            panorama: '/panoramas/scene_1.webp',
             hfov: 110,
             pitch: 0,
             yaw: 0,

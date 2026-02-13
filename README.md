@@ -9,7 +9,7 @@
 ```text
 college-virtual-map-ai/
 ├── public/                      # Статичні ресурси
-│   ├── panoramas/               # Файли 360° панорам (.jpg)
+│   ├── panoramas/               # Файли 360° панорам (.webp)
 │   ├── icons/                   # Іконки PWA
 │   └── manifest.json            # Конфігурація PWA
 │
