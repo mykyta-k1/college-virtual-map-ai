@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-popover": "^1.1.15",
@@ -25,10 +26,12 @@
     "pannellum": "^2.5.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-inlinesvg": "^4.2.0",
     "react-router-dom": "^7.13.0",
     "react-zoom-pan-pinch": "^3.7.0",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "vaul": "^1.1.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

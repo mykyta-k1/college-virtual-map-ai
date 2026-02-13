@@ -1,15 +1,28 @@
 import Fuse from 'fuse.js';
 import type { FloorData, FloorRoom } from '@/config/floorsConfig';
+import { teachers } from '@/config/teachersConfig';
 
-// Додатковий тип для результату пошуку (кімната + ID поверху)
-export type SearchableRoom = FloorRoom & { floorId: number };
+// Додатковий тип для результату пошуку (кімната + ID поверху + розширені дані для пошуку)
+export type SearchableRoom = FloorRoom & {
+    floorId: number;
+    // Додаємо віртуальне поле для пошуку, яке міститиме імена викладачів
+    teacherNames?: string[];
+};
 
 export const flattenRooms = (floors: FloorData[]): SearchableRoom[] => {
     return floors.flatMap((floor) =>
-        floor.rooms.map((room) => ({
-            ...room,
-            floorId: floor.id, // Додаємо ID поверху до кожної кімнати
-        }))
+        floor.rooms.map((room) => {
+            // Знаходимо імена викладачів по ID
+            const teacherNames = room.teacherIds
+                ?.map(id => teachers.find(t => t.id === id)?.name)
+                .filter((name): name is string => !!name) || [];
+
+            return {
+                ...room,
+                floorId: floor.id,
+                teacherNames: teacherNames
+            };
+        })
     );
 };
 
@@ -38,7 +51,7 @@ export const createFuseInstance = (rooms: SearchableRoom[]) => {
                 weight: 0.8 // Високий пріоритет. Синоніми ("ксерокс", "довідка").
             },
             {
-                name: 'staff',
+                name: 'teacherNames',
                 weight: 0.7 // Пошук викладачів ("Петренко").
             },
             {

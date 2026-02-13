@@ -20,6 +20,8 @@ const panoramaTourConfig: PanoramaTourConfig = {
         scene_1: {
             title: 'Корпус — Головний вхід',
             type: 'equirectangular',
+            // minPitch: -5,
+            // maxPitch: 1,
             panorama: '/panoramas/scene_1.jpg',
             hfov: 110,
             pitch: 0,

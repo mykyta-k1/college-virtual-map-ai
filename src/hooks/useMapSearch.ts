@@ -19,7 +19,6 @@ export function useMapSearch(floors: FloorData[]) {
         }
 
         const searchResults = fuse.search(query);
-        console.log("Search results for:", query, searchResults);
         setResults(searchResults);
     };
 

@@ -26,7 +26,7 @@ export default function SupportPage() {
     };
 
     return (
-        <div className="h-full w-full bg-background flex flex-col p-4 md:p-8 overflow-y-auto">
+        <div className="h-full w-full bg-background flex flex-col p-4 md:p-8 pb-24 md:pb-8 overflow-y-auto">
             <div className="max-w-xl mx-auto w-full space-y-8 text-center pt-10">
 
                 <div className="flex flex-col items-center gap-4">

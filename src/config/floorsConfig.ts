@@ -18,7 +18,7 @@ export interface FloorRoom {
     description?: string;
     note?: string;
     keywords?: string[];
-    staff?: string[];
+    teacherIds?: string[];
     panoramaSceneId?: string;
 }
 
@@ -42,7 +42,6 @@ export const floorsConfig: FloorData[] = [
                 type: "office",
                 description: "Приймальна комісія [Fictional]",
                 keywords: ["вступ", "документи", "абітурієнт"],
-                staff: ["Іваненко О.І."]
             },
             {
                 id: "r1-303",
@@ -77,7 +76,8 @@ export const floorsConfig: FloorData[] = [
                 label: "300",
                 type: "classroom",
                 description: "Комп'ютерний клас №1 [Fictional]",
-                keywords: ["pc", "лабораторна", "інформатика"]
+                keywords: ["pc", "лабораторна", "інформатика"],
+                teacherIds: ["t3"]
             },
             {
                 id: "r1-302",
@@ -168,7 +168,7 @@ export const floorsConfig: FloorData[] = [
                 type: "classroom",
                 description: "Кабінет історії [Fictional]",
                 keywords: ["історія", "право"],
-                staff: ["Петренко В.В."]
+                teacherIds: ["t4"]
             },
             {
                 id: "r2-321",
@@ -182,6 +182,7 @@ export const floorsConfig: FloorData[] = [
                 label: "323",
                 type: "classroom",
                 description: "Мала аудиторія [Fictional]",
+                teacherIds: ["t2"]
             },
             {
                 id: "r2-325",
@@ -214,7 +215,9 @@ export const floorsConfig: FloorData[] = [
                 label: "312",
                 type: "classroom",
                 description: "Лабораторія фізики [Fictional]",
-                keywords: ["фізика", "досліди", "лабораторна"]
+                keywords: ["фізика", "досліди", "лабораторна"],
+                panoramaSceneId: "scene_1",
+                teacherIds: ["t1"]
             },
             {
                 id: "r2-314",
@@ -270,7 +273,6 @@ export const floorsConfig: FloorData[] = [
                 type: "classroom",
                 description: "Велика лекційна зала [Fictional]",
                 keywords: ["потік", "лекція", "проектор"],
-                staff: ["Проф. Мельник А.С."]
             },
             {
                 id: "r3-335",
@@ -321,7 +323,8 @@ export const floorsConfig: FloorData[] = [
                 type: "classroom",
                 description: "Лабораторія хімії [Fictional]",
                 keywords: ["хімія", "реактиви", "лабораторна"],
-                note: "Обережно!"
+                note: "Обережно!",
+                teacherIds: ["t5"]
             },
 
             // --- Нижній ряд (326 - 342) ---
@@ -337,7 +340,8 @@ export const floorsConfig: FloorData[] = [
                 label: "328",
                 type: "office",
                 description: "Викладацька [Fictional]",
-                keywords: ["кафедра", "викладачі", "куратор"]
+                keywords: ["кафедра", "викладачі", "куратор"],
+                teacherIds: ["c1"]
             },
             {
                 id: "r3-330",
