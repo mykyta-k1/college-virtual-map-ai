@@ -95,3 +95,9 @@ interface PanoramaScene {
     hotSpots: HotSpot[]; // Точки переходу або інфо
 }
 ```
+
+## Використані джерела
+
+![https://www.npmjs.com/package/pannellum-react](Pannellum lib)
+![https://ui.shadcn.com/](UI lib)
+![https://www.fusejs.io/getting-started/installation.html](search engine)

@@ -8,8 +8,8 @@ import 'pannellum/build/pannellum.css';
 import './PanoramaViewer.css';
 
 interface PanoramaViewerProps {
-    /** Конфігурація туру з описом сцен та хотспотів */
-    config: PanoramaTourConfig;
+  /** Конфігурація туру з описом сцен та хотспотів */
+  config: PanoramaTourConfig;
 }
 
 /**
@@ -18,44 +18,39 @@ interface PanoramaViewerProps {
  * очищає ресурси при розмонтуванні.
  */
 const PanoramaViewer: React.FC<PanoramaViewerProps> = ({ config }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const viewerRef = useRef<PannellumViewer | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const viewerRef = useRef<PannellumViewer | null>(null);
 
-    useEffect(() => {
-        /* Не ініціалізувати, якщо контейнер ще не в DOM */
-        if (!containerRef.current) return;
+  useEffect(() => {
+    /* Не ініціалізувати, якщо контейнер ще не в DOM */
+    if (!containerRef.current) return;
 
-        /* Очистити попередній viewer (якщо конфігурація змінилась) */
-        if (viewerRef.current) {
-            viewerRef.current.destroy();
-            viewerRef.current = null;
-        }
+    /* Очистити попередній viewer (якщо конфігурація змінилась) */
+    if (viewerRef.current) {
+      viewerRef.current.destroy();
+      viewerRef.current = null;
+    }
 
-        /**
-         * Ініціалізація pannellum viewer з переданою конфігурацією.
-         * pannellum глобально доступний через window.pannellum
-         * (скрипт підключається через build-файл бібліотеки).
-         */
-        viewerRef.current = window.pannellum.viewer(
-            containerRef.current,
-            config as unknown as Record<string, unknown>
-        );
-
-        /* Очищення при розмонтуванні компонента */
-        return () => {
-            if (viewerRef.current) {
-                viewerRef.current.destroy();
-                viewerRef.current = null;
-            }
-        };
-    }, [config]);
-
-    return (
-        <div
-            ref={containerRef}
-            className="panorama-viewer-container"
-        />
+    /**
+     * Ініціалізація pannellum viewer з переданою конфігурацією.
+     * pannellum глобально доступний через window.pannellum
+     * (скрипт підключається через build-файл бібліотеки).
+     */
+    viewerRef.current = window.pannellum.viewer(
+      containerRef.current,
+      config as unknown as Record<string, unknown>,
     );
+
+    /* Очищення при розмонтуванні компонента */
+    return () => {
+      if (viewerRef.current) {
+        viewerRef.current.destroy();
+        viewerRef.current = null;
+      }
+    };
+  }, [config]);
+
+  return <div ref={containerRef} className="panorama-viewer-container" />;
 };
 
 export default PanoramaViewer;

@@ -20,7 +20,6 @@ function App() {
         - h-screen fixes full viewport usage.
       */}
       <div className="h-screen bg-background overflow-hidden relative font-sans">
-
         {/* --- NAVIGATION --- */}
 
         {/* Desktop Sidebar (Fixed, Overlay on Expand) */}
@@ -28,7 +27,6 @@ function App() {
 
         {/* Mobile Bottom Navigation (Floating) */}
         <MobileBottomNav />
-
 
         {/* --- MAIN CONTENT AREA --- */}
         {/* 
@@ -43,7 +41,6 @@ function App() {
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </main>
-
       </div>
     </BrowserRouter>
   );
