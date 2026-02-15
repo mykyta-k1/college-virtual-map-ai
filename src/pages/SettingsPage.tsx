@@ -14,18 +14,18 @@ export default function SettingsPage() {
         <section className="bg-card border rounded-xl p-4 shadow-sm">
           <h2 className="text-lg font-semibold mb-3 border-b pb-2">Зовнішній вигляд</h2>
           <div className="flex items-center justify-between">
-            <span className="text-sm">Темна тема</span>
+            <span className="text-sm">Колір теми</span>
             <ThemeToggle />
           </div>
         </section>
 
         {/* Other settings placeholders */}
-        <section className="bg-card border rounded-xl p-4 shadow-sm opacity-50 pointer-events-none">
+        {/* <section className="bg-card border rounded-xl p-4 shadow-sm opacity-50 pointer-events-none">
           <h2 className="text-lg font-semibold mb-3 border-b pb-2">Мова (скоро)</h2>
           <div className="flex items-center justify-between">
             <span className="text-sm">Українська</span>
           </div>
-        </section>
+        </section> */}
       </div>
     </div>
   );

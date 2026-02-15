@@ -25,38 +25,38 @@ export const faqData: FaqItem[] = [
         id: "faq-admin-1",
         category: "admin",
         question: "Де знаходиться Навчальна частина?",
-        answer: "Кабінет 205 (2 поверх). Тут вирішуються питання розкладу, перездач та довідок.",
-        mapLocationId: "r2-205",
+        answer: "Кабінет 347 (3 поверх). Тут вирішуються питання розкладу, перездач та довідок.",
+        mapLocationId: "r3-347",
         actionLabel: "Показати на карті"
     },
     {
         id: "faq-admin-2",
         category: "admin",
         question: "Де знаходиться Викладацька / Кафедра?",
-        answer: "Кабінет 328 (3 поверх). Тут можна знайти викладачів на перерві.",
-        mapLocationId: "r3-328"
+        answer: "Кабінет 303 (1 поверх). Тут можна знайти викладачів на перерві.",
+        mapLocationId: "r1-303"
     },
     {
         id: "faq-admin-3",
         category: "admin",
         question: "Де староста може взяти/здати журнал групи?",
-        answer: "Журнали зберігаються у Методичному кабінеті (321) або у Викладацькій (328), залежно від кафедри.",
-        mapLocationId: "r2-321", // Ведемо до методичного, як основного місця
-        actionLabel: "Показати Метод. кабінет"
+        answer: "Журнали зберігаються у Навчальній частині (347), залежно від кафедри.",
+        mapLocationId: "r3-347", // Ведемо до Навчальної частини, як основного місця
+        actionLabel: "Показати Навчальну частину"
     },
     {
         id: "faq-admin-4",
         category: "admin",
         question: "Де знаходиться Бухгалтерія (питання стипендії)?",
-        answer: "Кабінет 307 (1 поверх). Графік прийому студентів: 13:00 - 15:00.",
-        mapLocationId: "r1-307"
+        answer: "Кабінет 347 (3 поверх). Бухгалтерія знаходиться в тому ж приміщенні, що і Навчальна частина, але має окремий вхід з коридору.",
+        mapLocationId: "r3-347"
     },
     {
         id: "faq-admin-5",
         category: "admin",
         question: "Де кабінет Директора?",
-        answer: "Приймальня директора знаходиться у кабінеті 201 (2 поверх, ліве крило).",
-        mapLocationId: "r2-201"
+        answer: "Приймальня директора знаходиться у кабінеті 338 (3 поверх, праве крило).",
+        mapLocationId: "r3-338"
     },
 
     // =================================================================================
@@ -67,7 +67,7 @@ export const faqData: FaqItem[] = [
         category: "info",
         question: "Який офіційний сайт коледжу?",
         answer: "Актуальні новини та оголошення шукайте на офіційному сайті.",
-        externalLink: "https://www.uzhnu.edu.ua/uk/",
+        externalLink: "https://www.college.uzhnu.edu.ua/",
         actionLabel: "Відкрити сайт"
     },
     {
@@ -75,7 +75,7 @@ export const faqData: FaqItem[] = [
         category: "info",
         question: "Де подивитися розклад занять?",
         answer: "Розклад публікується на офіційному сайті у розділі \"Студенту\" або на дошці оголошень у холі 1-го поверху.",
-        externalLink: "https://www.uzhnu.edu.ua/uk/infocentre/dekanats", // Приклад посилання
+        externalLink: "https://www.college.uzhnu.edu.ua/navchannya-ta-vixovannya/info-for-student/rozklad-zanyat", // Приклад посилання
         actionLabel: "Розклад на сайті"
     },
     {

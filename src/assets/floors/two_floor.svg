@@ -5,13 +5,13 @@
 <path id="r2-312" d="M13 241L283 241.08V372H13L13 241Z" fill="white"/>
 <path id="r2-319" d="M14 14L284 14.0793V143H14L14 14Z" fill="white"/>
 <path id="r2-321" d="M284 13L420 13.0793V142H284L284 13Z" fill="white"/>
-<path id="r2-stair-left" d="M420 13L486 13.0793V142H420L420 13Z" fill="white"/>
+<path id="r2-stairs-1" d="M420 13L486 13.0793V142H420L420 13Z" fill="white"/>
 <path id="r2-323" d="M486 13L639 13.0793V142H486L486 13Z" fill="white"/>
 <path id="r2-325" d="M640 13L902 13.0793V142H640L640 13Z" fill="white"/>
 <path id="r2-327" d="M902 13L1176 13.0793V142H902L902 13Z" fill="white"/>
 <path id="r2-329" d="M1238 13L1374 13.0793V142H1238L1238 13Z" fill="white"/>
 <path id="r2-331" d="M1374 13L1646 13.0793V142H1374L1374 13Z" fill="white"/>
-<path id="r2-stair-right" d="M1176 13L1238 13.0793V142H1176L1176 13Z" fill="white"/>
+<path id="r2-stairs-2" d="M1176 13L1238 13.0793V142H1176L1176 13Z" fill="white"/>
 <path id="r2-314" d="M283 241L485 241.08V372H283L283 241Z" fill="white"/>
 <path id="r2-316" d="M485 241L751 241.08V372H485L485 241Z" fill="white"/>
 <path id="r2-318" d="M751 241L922 241.08V372H751L751 241Z" fill="white"/>
