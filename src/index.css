@@ -18,11 +18,20 @@ body,
   min-height: 100%;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   background-color: var(--background);
+  overscroll-behavior: none;
+  /* Prevent rubber-banding/chrome hiding on mobile */
 }
 
-html {
-  scrollbar-gutter: stable;
+/* Ensure full height on mobile with dvh */
+@supports (height: 100dvh) {
+
+  html,
+  body,
+  #root {
+    height: 100dvh;
+  }
 }
+
 
 @layer base {
   :root {

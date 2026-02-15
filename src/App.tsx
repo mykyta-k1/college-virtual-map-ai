@@ -20,7 +20,7 @@ function App() {
         - Desktop: Sidebar (Fixed Left), Main Content with left padding.
         - h-screen fixes full viewport usage.
       */}
-      <div className="h-screen bg-background overflow-hidden relative font-sans">
+      <div className="h-screen w-screen md:h-screen sm:h-screen lg:h-screen xl:h-screen 2xl:h-screen lg:w-screen xl:w-screen 2xl:w-screen supports-[height:100dvh]:h-[100dvh] bg-background overflow-hidden relative font-sans">
         {/* --- NAVIGATION --- */}
 
         {/* Desktop Sidebar (Fixed, Overlay on Expand) */}

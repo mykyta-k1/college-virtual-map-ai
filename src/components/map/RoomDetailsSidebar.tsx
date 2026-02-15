@@ -56,7 +56,8 @@ export function RoomDetailsSidebar({ room, isOpen, onClose, onRouteClick }: Room
   if (!room) return null;
 
   const Content = (
-    <div className="flex flex-col h-full bg-background pt-6"> {/* Added padding for mobile drawer drag area */}
+    // Mobile needs padding for drag handle, Desktop should be flush
+    <div className={`flex flex-col h-full bg-background ${isMobile ? 'pt-6' : 'pt-0'}`}>
       {/* Header: Panorama or Icon */}
       <div className="relative w-full h-56 md:h-64 shrink-0 bg-secondary flex items-center justify-center border-b border-border/50 overflow-hidden">
         {hasPanorama && roomPanoramaConfig ? (
@@ -174,7 +175,7 @@ export function RoomDetailsSidebar({ room, isOpen, onClose, onRouteClick }: Room
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="right" className="w-full sm:max-w-md p-0">
+      <SheetContent side="right" className="w-full sm:max-w-md p-0 border-l-0 sm:border-l">
         {Content}
       </SheetContent>
       {/* Disable overlay darkening by not rendering SheetOverlay */}
