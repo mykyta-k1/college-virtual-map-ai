@@ -7,7 +7,7 @@ import type { PanoramaTourConfig } from '../types/panorama';
 const panoramaTourConfig: PanoramaTourConfig = {
   default: {
     firstScene: 'hall_1_1', // Default starting point (Floor 1 Hall)
-    autoLoad: true,
+    autoLoad: false,
     sceneFadeDuration: 1000,
     showZoomCtrl: true,
     showFullscreenCtrl: true,

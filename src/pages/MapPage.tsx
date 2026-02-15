@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { floorsConfig } from '@/config/floorsConfig';
 import MapViewer from '@/components/map/MapViewer';
+import type { SearchableRoom } from '@/services/search.service';
 
 /**
  * Сторінка "Мапа" — основний компонент.
@@ -9,18 +10,28 @@ import MapViewer from '@/components/map/MapViewer';
  * Оновлений Layout (Full Viewport):
  * - Мапа займає ВЕСЬ доступний простір сторінки (h-full w-full).
  * - Відповідає розміру батьківського контейнера (main в App.tsx).
- * - Обробляє URL параметри ?room=ID для автоматичного вибору та ?search=QUERY для пошуку.
+ * - Обробляє URL параметри ?room=ID та ?search=QUERY.
+ * - Синхронізує URL тільки коли відкривається/закривається sidebar з деталями.
  */
 export default function MapPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeFloorId, setActiveFloorId] = useState(1);
 
-  // State to hold initial search query from URL (passed once to MapViewer)
+  // State to hold initial search query from URL
   const [initialSearchQuery, setInitialSearchQuery] = useState('');
 
   const activeFloor = floorsConfig.find((f) => f.id === activeFloorId) ?? floorsConfig[0];
 
+  // Process URL parameters - reactive to changes
   useEffect(() => {
+    // Check for direct search parameter first (from AI chat or shared link)
+    const searchQuery = searchParams.get('search');
+    if (searchQuery) {
+      setInitialSearchQuery(searchQuery);
+      return;
+    }
+
+    // Fallback to room parameter (from FAQ)
     const roomId = searchParams.get('room');
     if (roomId) {
       // Find floor for this room
@@ -31,16 +42,25 @@ export default function MapPage() {
         // Find the room label to populate search
         const room = floor.rooms.find(r => r.id === roomId);
         if (room) {
-          // We want to simulate a search for this room so it gets highlighted and selected
           setInitialSearchQuery(room.label);
         }
       }
+    } else {
+      // No URL params - clear initial search
+      setInitialSearchQuery('');
     }
-  }, [searchParams]);
+  }, [searchParams]); // React to URL changes
 
-  const handleSearch = (query: string) => {
-    console.log('Search query:', query);
-  };
+  // Handle room selection - updates URL when sidebar opens with room details
+  const handleRoomSelect = useCallback((room: SearchableRoom | null) => {
+    if (room) {
+      // Room selected - sidebar opening - update URL
+      setSearchParams({ search: room.label }, { replace: true });
+    } else {
+      // Room deselected - sidebar closing - clear URL
+      setSearchParams({}, { replace: true });
+    }
+  }, [setSearchParams]);
 
   return (
     <div className="h-full w-full overflow-hidden bg-background relative">
@@ -48,7 +68,7 @@ export default function MapPage() {
         floor={activeFloor}
         allFloors={floorsConfig}
         onFloorChange={setActiveFloorId}
-        onSearch={handleSearch}
+        onRoomSelect={handleRoomSelect}
         initialSearchQuery={initialSearchQuery}
       />
     </div>

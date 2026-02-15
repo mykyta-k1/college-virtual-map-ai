@@ -1,5 +1,6 @@
 import { useReducer, useCallback } from 'react';
 import type { SearchableRoom } from '@/services/search.service';
+import type { PathNode } from '@/config/navigatorPathsConfig';
 
 // --- State Interface ---
 interface MapViewerState {
@@ -15,6 +16,7 @@ interface MapViewerState {
     routeQueryStart: string;
     routeQueryEnd: string;
     activeRouteInput: 'start' | 'end';
+    currentPath: PathNode[] | null;
 }
 
 // --- Initial State ---
@@ -29,9 +31,10 @@ const initialState: MapViewerState = {
     routeQueryStart: '',
     routeQueryEnd: '',
     activeRouteInput: 'end',
+    currentPath: null,
 };
 
-// --- Actions ---
+// Actions
 type MapViewerAction =
     | { type: 'SET_SCALE'; payload: number }
     | { type: 'SELECT_ROOM'; payload: SearchableRoom }
@@ -45,9 +48,10 @@ type MapViewerAction =
     | { type: 'SET_ROUTE_QUERY_START'; payload: string }
     | { type: 'SET_ROUTE_QUERY_END'; payload: string }
     | { type: 'SWAP_ROUTE' }
-    | { type: 'SET_ACTIVE_ROUTE_INPUT'; payload: 'start' | 'end' };
+    | { type: 'SET_ACTIVE_ROUTE_INPUT'; payload: 'start' | 'end' }
+    | { type: 'SET_CURRENT_PATH'; payload: PathNode[] | null };
 
-// --- Reducer ---
+// Reducer
 function mapViewerReducer(state: MapViewerState, action: MapViewerAction): MapViewerState {
     switch (action.type) {
         case 'SET_SCALE':
@@ -58,7 +62,7 @@ function mapViewerReducer(state: MapViewerState, action: MapViewerAction): MapVi
                 ...state,
                 selectedRoom: action.payload,
                 isSidebarOpen: true,
-                // searchQuery: action.payload.label, // DISABLED: Do not sync search query on map click
+                searchQuery: '', // Clear search query to avoid ghost highlights
             };
 
         case 'DESELECT_ROOM':
@@ -71,16 +75,23 @@ function mapViewerReducer(state: MapViewerState, action: MapViewerAction): MapVi
             return { ...state, searchQuery: '', selectedRoom: null, isSidebarOpen: false };
 
         case 'ENABLE_ROUTE_MODE': {
-            // Logic to transition from explore to route mode
-            let newState = { ...state, isRouteMode: true, searchQuery: '', startPoint: null, routeQueryStart: '' };
+            // Transition to route mode
+            let newState: MapViewerState = {
+                ...state,
+                isRouteMode: true,
+                searchQuery: '',
+                startPoint: null,
+                routeQueryStart: '',
+                currentPath: null
+            };
 
-            // If a room was selected, make it the destination
+            // Use selected room as destination if available
             if (state.selectedRoom) {
                 newState.endPoint = state.selectedRoom;
                 newState.routeQueryEnd = state.selectedRoom.label;
                 newState.activeRouteInput = 'start';
             } else if (state.searchQuery) {
-                // If just text query
+                // Use current search as destination
                 newState.endPoint = null;
                 newState.routeQueryEnd = state.searchQuery;
                 newState.activeRouteInput = 'start';
@@ -100,7 +111,8 @@ function mapViewerReducer(state: MapViewerState, action: MapViewerAction): MapVi
                 endPoint: null,
                 routeQueryStart: '',
                 routeQueryEnd: '',
-                searchQuery: '', // Clear search on exit
+                searchQuery: '',
+                currentPath: null,
             };
 
         case 'SET_START_POINT':
@@ -108,7 +120,7 @@ function mapViewerReducer(state: MapViewerState, action: MapViewerAction): MapVi
                 ...state,
                 startPoint: action.payload,
                 routeQueryStart: action.payload.label,
-                searchQuery: '' // Clear global search to avoid ghost highlights
+                searchQuery: ''
             };
 
         case 'SET_END_POINT':
@@ -116,7 +128,7 @@ function mapViewerReducer(state: MapViewerState, action: MapViewerAction): MapVi
                 ...state,
                 endPoint: action.payload,
                 routeQueryEnd: action.payload.label,
-                searchQuery: '' // Clear global search to avoid ghost highlights
+                searchQuery: ''
             };
 
         case 'SET_ROUTE_QUERY_START':
@@ -137,6 +149,9 @@ function mapViewerReducer(state: MapViewerState, action: MapViewerAction): MapVi
         case 'SET_ACTIVE_ROUTE_INPUT':
             return { ...state, activeRouteInput: action.payload };
 
+        case 'SET_CURRENT_PATH':
+            return { ...state, currentPath: action.payload };
+
         default:
             return state;
     }
@@ -144,9 +159,7 @@ function mapViewerReducer(state: MapViewerState, action: MapViewerAction): MapVi
 
 /**
  * Custom Hook for MapViewer State Logic
- * 
- * Manages the complex state transitions between Explore Mode and Route Mode,
- * including room selection, search queries, and route point management.
+ * Manages MapViewer state including zoom, selection, search, and routing modes.
  */
 export function useMapViewerState() {
     const [state, dispatch] = useReducer(mapViewerReducer, initialState);
@@ -179,6 +192,8 @@ export function useMapViewerState() {
 
     const setActiveRouteInput = useCallback((input: 'start' | 'end') => dispatch({ type: 'SET_ACTIVE_ROUTE_INPUT', payload: input }), []);
 
+    const setCurrentPath = useCallback((path: PathNode[] | null) => dispatch({ type: 'SET_CURRENT_PATH', payload: path }), []);
+
     // Complex Handler: Select Result based on mode/type
     const selectResult = useCallback((item: SearchableRoom, type: 'search' | 'start' | 'end', onFloorChange?: (id: number) => void) => {
         if (type === 'start') {
@@ -208,6 +223,7 @@ export function useMapViewerState() {
             setRouteQueryEnd,
             swapRoute,
             setActiveRouteInput,
+            setCurrentPath,
             selectResult
         }
     };

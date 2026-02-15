@@ -39,7 +39,6 @@ const DrawerContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DrawerPortal>
-    <DrawerOverlay />
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(
@@ -48,7 +47,11 @@ const DrawerContent = React.forwardRef<
       )}
       {...props}
     >
-      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
+      {/* Double-line Handle for better affordance */}
+      <div className="mx-auto mt-4 flex flex-col gap-1">
+        <div className="h-1.5 w-[100px] rounded-full bg-muted" />
+        <div className="h-1.5 w-[100px] rounded-full bg-muted/50" />
+      </div>
       {children}
     </DrawerPrimitive.Content>
   </DrawerPortal>

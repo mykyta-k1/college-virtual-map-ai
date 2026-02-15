@@ -1,15 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
-import { X, Send, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { X, Send, Sparkles, MapPin, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-
-interface Message {
-    id: string;
-    role: 'user' | 'assistant';
-    content: string;
-    timestamp: Date;
-}
+import { useAiChat } from '@/hooks/useAiChat';
 
 interface AiChatWindowProps {
     isOpen: boolean;
@@ -18,71 +12,23 @@ interface AiChatWindowProps {
 
 /**
  * AI Chat Window Component
- * Interactive chat interface with welcome message
+ * Interactive chat interface with welcome message and worker integration
  */
 export function AiChatWindow({ isOpen, onClose }: AiChatWindowProps) {
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [input, setInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const scrollRef = useRef<HTMLDivElement>(null);
-
-    // Send welcome message after 1 second of opening
-    useEffect(() => {
-        if (isOpen && messages.length === 0) {
-            const timer = setTimeout(() => {
-                const welcomeMessage: Message = {
-                    id: 'welcome',
-                    role: 'assistant',
-                    content: 'Привіт! 👋 Я можу допомогти тобі знайти кабінети, викладачів або інші місця в коледжі. Просто задай своє питання!',
-                    timestamp: new Date(),
-                };
-                setMessages([welcomeMessage]);
-            }, 1000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [isOpen, messages.length]);
-
-    // Auto-scroll to bottom when new messages arrive
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }
-    }, [messages]);
-
-    const handleSend = async () => {
-        if (!input.trim() || isLoading) return;
-
-        const userMessage: Message = {
-            id: Date.now().toString(),
-            role: 'user',
-            content: input.trim(),
-            timestamp: new Date(),
-        };
-
-        setMessages(prev => [...prev, userMessage]);
-        setInput('');
-        setIsLoading(true);
-
-        // TODO: Replace with actual API call to worker
-        // For now, simulate a response
-        setTimeout(() => {
-            const assistantMessage: Message = {
-                id: (Date.now() + 1).toString(),
-                role: 'assistant',
-                content: 'Дякую за питання! Наразі я в режимі розробки. Незабаром я зможу допомогти тобі з пошуком кабінетів та іншою інформацією про коледж.',
-                timestamp: new Date(),
-            };
-            setMessages(prev => [...prev, assistantMessage]);
-            setIsLoading(false);
-        }, 1000);
-    };
+    const navigate = useNavigate();
+    const { messages, input, isLoading, scrollRef, setInput, sendMessage } = useAiChat(isOpen);
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            handleSend();
+            sendMessage();
         }
+    };
+
+    const handleShowOnMap = (label: string) => {
+        // Navigate to map page and trigger search with the label
+        navigate(`/?search=${encodeURIComponent(label)}`);
+        onClose();
     };
 
     if (!isOpen) return null;
@@ -117,27 +63,60 @@ export function AiChatWindow({ isOpen, onClose }: AiChatWindowProps) {
             <ScrollArea className="flex-1 p-4" ref={scrollRef}>
                 <div className="space-y-4">
                     {messages.map((message) => (
-                        <div
-                            key={message.id}
-                            className={cn(
-                                'flex',
-                                message.role === 'user' ? 'justify-end' : 'justify-start'
-                            )}
-                        >
+                        <div key={message.id}>
                             <div
                                 className={cn(
-                                    'max-w-[80%] rounded-2xl px-4 py-2 text-sm',
-                                    message.role === 'user'
-                                        ? 'bg-primary text-primary-foreground'
-                                        : 'bg-secondary text-secondary-foreground'
+                                    'flex gap-2 items-start',
+                                    message.role === 'user' ? 'justify-end' : 'justify-start'
                                 )}
                             >
-                                {message.content}
+                                {/* Assistant Avatar */}
+                                {message.role === 'assistant' && (
+                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mt-1">
+                                        <Sparkles className="w-4 h-4 text-primary" />
+                                    </div>
+                                )}
+
+                                <div
+                                    className={cn(
+                                        'max-w-[75%] rounded-2xl px-4 py-2 text-sm',
+                                        message.role === 'user'
+                                            ? 'bg-primary text-primary-foreground'
+                                            : 'bg-secondary text-secondary-foreground'
+                                    )}
+                                >
+                                    <p className="whitespace-pre-wrap">{message.content}</p>
+                                </div>
+
+                                {/* User Avatar */}
+                                {message.role === 'user' && (
+                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center mt-1">
+                                        <User className="w-4 h-4 text-primary-foreground" />
+                                    </div>
+                                )}
                             </div>
+
+                            {/* Show "Show on Map" button if meta tag exists */}
+                            {message.role === 'assistant' && message.metaTag && (
+                                <div className="flex justify-start mt-2 ml-10">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handleShowOnMap(message.metaTag!.label)}
+                                        className="gap-2 text-xs"
+                                    >
+                                        <MapPin className="w-3 h-3" />
+                                        Показати на мапі
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     ))}
                     {isLoading && (
-                        <div className="flex justify-start">
+                        <div className="flex justify-start gap-2 items-start">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mt-1">
+                                <Sparkles className="w-4 h-4 text-primary" />
+                            </div>
                             <div className="bg-secondary rounded-2xl px-4 py-2 text-sm">
                                 <div className="flex gap-1">
                                     <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -163,7 +142,7 @@ export function AiChatWindow({ isOpen, onClose }: AiChatWindowProps) {
                         disabled={isLoading}
                     />
                     <Button
-                        onClick={handleSend}
+                        onClick={sendMessage}
                         size="icon"
                         disabled={!input.trim() || isLoading}
                         className="rounded-full"

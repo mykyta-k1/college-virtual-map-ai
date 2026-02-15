@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useRef } from 'react';
 import type { FloorData } from '@/config/floorsConfig';
 import { MapService } from '@/services/map.service';
 import { NavigationService } from '@/services/navigation.service';
@@ -9,6 +9,7 @@ import { useMapHighlights } from '@/hooks/useMapHighlights';
 import SVG from 'react-inlinesvg';
 import { MapSearch } from './MapSearch';
 import { RoomDetailsSidebar } from './RoomDetailsSidebar';
+import { RouteOverlay } from './RouteOverlay';
 import { ZoomControls } from './ZoomControls';
 import { FloorSelector } from './FloorSelector';
 import type { SearchableRoom } from '@/services/search.service';
@@ -17,43 +18,59 @@ interface MapViewerProps {
   floor: FloorData;
   allFloors: { id: number; label: string }[];
   onFloorChange: (id: number) => void;
-  onSearch?: (query: string) => void;
+  onRoomSelect?: (room: SearchableRoom | null) => void;
   initialSearchQuery?: string;
 }
 
 /**
- * Компонент відображення SVG карти поверху з елементами управління.
- * Використовує useMapViewerState для керування станом взаємодії.
+ * SVG Map Viewer component with zoom/pan controls and room interaction.
  */
 export default function MapViewer({
   floor,
   allFloors,
   onFloorChange,
-  onSearch: propOnSearch,
+  onRoomSelect,
   initialSearchQuery,
 }: MapViewerProps) {
-  // --- Domain State Hook ---
+  // Управління станом
   const { state, actions } = useMapViewerState();
 
-  // Сервіс навігації
   const navService = useMemo(() => NavigationService.getInstance(), []);
 
-  // Хук пошуку
   const { search, results } = useMapSearch(allFloors as any);
 
-  // --- Effect: Handle Initial Search Query (e.g. from URL) ---
-  useEffect(() => {
-    if (initialSearchQuery && !state.searchQuery) {
-      actions.setSearchQuery(initialSearchQuery);
-      search(initialSearchQuery);
-    }
-  }, [initialSearchQuery]);
+  // Синхронізація стану з початковим запитом URL
+  const prevInitialQuery = useRef(initialSearchQuery);
 
-  // --- Effect: Sync local search with global prop if needed (optional) ---
-  // If we want to notify parent about search changes
+  // Синхронізація стану зі змінами URL (лише коли URL справді змінюється)
   useEffect(() => {
-    if (propOnSearch) propOnSearch(state.searchQuery);
-  }, [state.searchQuery, propOnSearch]);
+    if (initialSearchQuery !== prevInitialQuery.current) {
+      prevInitialQuery.current = initialSearchQuery;
+
+      if (initialSearchQuery) {
+        // Пропускаємо автозаповнення, якщо URL відповідає вибраній кімнаті (синхронізація навігації)
+        if (state.selectedRoom && initialSearchQuery === state.selectedRoom.label) {
+          return;
+        }
+
+        if (initialSearchQuery !== state.searchQuery) {
+          actions.setSearchQuery(initialSearchQuery);
+          search(initialSearchQuery);
+        }
+      } else if (state.searchQuery && !state.selectedRoom) {
+        // Очищаємо пошук, якщо URL порожній і кімната не вибрана
+        actions.clearSearch();
+        search('');
+      }
+    }
+  }, [initialSearchQuery, state.selectedRoom, state.searchQuery]);
+
+  // Сповіщаємо батьківський компонент про зміну вибраної кімнати
+  useEffect(() => {
+    if (onRoomSelect) {
+      onRoomSelect(state.selectedRoom);
+    }
+  }, [state.selectedRoom, onRoomSelect]);
 
   // --- Handlers Wrappers ---
 
@@ -68,8 +85,8 @@ export default function MapViewer({
     search('');
   };
 
-  // Complex Handler: Select Result based on mode/type
-  // We need to wrap this to handle floor change which is part of MapViewer props
+  // Обробник вибору результату
+  // Обгортаємо, щоб обробити зміну поверху, яка є частиною props MapViewer
   const handleSelectResult = (item: SearchableRoom, type: 'search' | 'start' | 'end') => {
     actions.selectResult(item, type, onFloorChange);
     if (type === 'search') {
@@ -77,7 +94,7 @@ export default function MapViewer({
     }
   };
 
-  // Ефект для автоматичного розрахунку маршруту
+  // Ефект для розрахунку маршруту
   useEffect(() => {
     if (state.isRouteMode && state.startPoint && state.endPoint) {
       const startNode = navService.findNodeByRoomId(state.startPoint.id);
@@ -88,22 +105,28 @@ export default function MapViewer({
         const path = navService.findPath(startNode.id, endNode.id);
         if (path) {
           console.log("✅ Route found:", path);
-          // TODO: Візуалізація шляху (буде в наступному таску)
+          actions.setCurrentPath(path);
         } else {
           console.warn("❌ Route not found!");
+          actions.setCurrentPath(null);
         }
       } else {
         console.warn("⚠️ Cannot find graph nodes for selected rooms:", state.startPoint?.id, state.endPoint?.id);
+        actions.setCurrentPath(null);
+      }
+    } else {
+      // Clear path if not in route mode or points are missing
+      if (state.currentPath) {
+        actions.setCurrentPath(null);
       }
     }
   }, [state.isRouteMode, state.startPoint, state.endPoint, navService]);
 
   const handleMapClick = (e: React.MouseEvent) => {
-    // --- ЛОГУВАННЯ КООРДИНАТ ---
     const svgElement = e.currentTarget as unknown as SVGSVGElement;
     const coords = MapService.getSVGClickCoordinates(e, svgElement);
     if (coords) {
-      console.log(`📍 Map Click: x=${coords.x}, y=${coords.y}`);
+      console.log(`Map Click: x=${coords.x}, y=${coords.y}`);
     }
 
     let target = e.target as Element;
@@ -161,7 +184,7 @@ export default function MapViewer({
         `}
       </style>
 
-      {/* --- SVG MAP --- */}
+      {/* SVG Map Container */}
       <TransformWrapper
         initialScale={1} minScale={0.5} maxScale={4} centerOnInit
         wheel={{ step: 0.1 }}
@@ -177,20 +200,30 @@ export default function MapViewer({
               wrapperStyle={{ width: '100%', height: '100%' }}
               contentStyle={{ width: '100%', height: '100%' }}
             >
-              <SVG
-                src={floor.svgUrl}
-                title={`План ${floor.label}`}
-                className="w-full h-full"
-                style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}
-                loader={<div className="animate-pulse bg-gray-200 w-full h-full rounded-lg" />}
-                onClick={handleMapClick}
-              />
+              <div className="relative w-full h-full">
+                <SVG
+                  src={floor.svgUrl}
+                  title={`План ${floor.label}`}
+                  className="w-full h-full"
+                  style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}
+                  loader={<div className="animate-pulse bg-gray-200 w-full h-full rounded-lg" />}
+                  onClick={handleMapClick}
+                />
+                {state.currentPath && (
+                  <RouteOverlay
+                    path={state.currentPath}
+                    currentFloorId={floor.id}
+                    viewBox="0 0 1658 421"
+                    onFloorChange={onFloorChange}
+                  />
+                )}
+              </div>
             </TransformComponent>
           </>
         )}
       </TransformWrapper>
 
-      {/* --- SIDEBAR --- */}
+      {/* Room Details Sidebar */}
       <RoomDetailsSidebar
         room={state.selectedRoom}
         isOpen={state.isSidebarOpen}
@@ -198,7 +231,7 @@ export default function MapViewer({
         onRouteClick={handleSidebarRouteClick}
       />
 
-      {/* --- SEARCH & ROUTE UI --- */}
+      {/* Search & Route Controls */}
       <MapSearch
         isRouteMode={state.isRouteMode}
         searchQuery={state.searchQuery}
@@ -220,7 +253,7 @@ export default function MapViewer({
       />
 
 
-      {/* --- FLOOR SELECTOR --- */}
+      {/* Floor Selector */}
       <FloorSelector
         currentFloorId={floor.id}
         allFloors={allFloors}
