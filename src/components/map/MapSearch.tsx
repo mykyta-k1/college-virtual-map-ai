@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, X, Navigation, CircleDot, MapPin, ArrowUpDown, AlertCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -60,8 +60,20 @@ export function MapSearch({
 
     const hasResults = results.length > 0;
     const hasQuery = currentQuery.trim().length > 0;
-    // Local error check if not passed from parent
+    // Local error check
     const isError = hasQuery && !hasResults;
+    const [showError, setShowError] = useState(false);
+
+    // Manage transient error visibility
+    useEffect(() => {
+        if (isError) {
+            setShowError(true);
+            const timer = setTimeout(() => setShowError(false), 3000); // Hide after 3 seconds
+            return () => clearTimeout(timer);
+        } else {
+            setShowError(false);
+        }
+    }, [isError]);
 
     // Sync Dropdown visibility with query interactions
     const handleInputFocus = (type: 'search' | 'start' | 'end') => {
@@ -213,7 +225,7 @@ export function MapSearch({
                 </div>
 
                 {/* Error Message */}
-                {isError && (
+                {showError && (
                     <div className={`
                 absolute left-0 right-0 bg-destructive/90 text-destructive-foreground text-sm py-1.5 px-3 rounded-md shadow-md backdrop-blur-sm animate-in fade-in slide-in-from-top-1 flex items-center gap-2 z-10
                 ${isRouteMode ? 'top-[calc(100%+0.5rem)]' : 'top-14'}
