@@ -27,7 +27,9 @@ const panoramaTourConfig: PanoramaTourConfig = {
       title: 'Холл 1-го поверху (Вхід)',
       type: 'equirectangular',
       panorama: '/panoramas/floor1/hall_360.webp',
-      hotSpots: [{ type: 'scene', text: 'До лівих сходів', sceneId: 'hall_1_1', pitch: 10, yaw: 290 }],
+      hotSpots: [
+        { type: 'scene', text: 'До лівих сходів', sceneId: 'hall_1_1', pitch: 10, yaw: 290 },
+      ],
     },
     hall_1_2_2: {
       title: 'Холл 1-го поверху (Сходи)',
@@ -53,7 +55,7 @@ const panoramaTourConfig: PanoramaTourConfig = {
       panorama: '/panoramas/floor1/h1_2.webp',
       hotSpots: [],
     },
-    stair_1_left:{
+    stair_1_left: {
       title: 'Сходи з ліва',
       type: 'equirectangular',
       panorama: '/panoramas/floor1/h1_1.webp',
@@ -154,7 +156,9 @@ const panoramaTourConfig: PanoramaTourConfig = {
       title: 'Аудиторія 312',
       type: 'equirectangular',
       panorama: '/panoramas/floor1/c312.webp',
-      hotSpots: [{ type: 'scene', text: 'До дверей', sceneId: 'room_312_door', pitch: 0, yaw: 255 }],
+      hotSpots: [
+        { type: 'scene', text: 'До дверей', sceneId: 'room_312_door', pitch: 0, yaw: 255 },
+      ],
     },
     room_314: {
       title: 'Аудиторія 314',
@@ -229,13 +233,13 @@ const panoramaTourConfig: PanoramaTourConfig = {
       hotSpots: [],
     },
 
-      stair_2_right: {
+    stair_2_right: {
       title: 'Сходи з права',
       type: 'equirectangular',
       panorama: '/panoramas/floor2/h2_3_1.webp',
       hotSpots: [],
     },
-    stair_2_left:{
+    stair_2_left: {
       title: 'Сходи з ліва',
       type: 'equirectangular',
       panorama: '/panoramas/floor2/h2.webp',

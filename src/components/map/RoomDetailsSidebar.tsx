@@ -27,7 +27,12 @@ interface RoomDetailsSidebarProps {
   onRouteClick?: () => void;
 }
 
-export function RoomDetailsSidebar({ room, isOpen, onClose, onRouteClick }: RoomDetailsSidebarProps) {
+export function RoomDetailsSidebar({
+  room,
+  isOpen,
+  onClose,
+  onRouteClick,
+}: RoomDetailsSidebarProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   // Check if room has panorama scenario
@@ -38,15 +43,15 @@ export function RoomDetailsSidebar({ room, isOpen, onClose, onRouteClick }: Room
     () =>
       hasPanorama && room?.panoramaSceneId
         ? {
-          ...panoramaTourConfig,
-          default: {
-            ...panoramaTourConfig.default,
-            firstScene: room.panoramaSceneId,
-            // autoLoad: false is now inherited from config/panoramaTour.ts
-          },
-        }
+            ...panoramaTourConfig,
+            default: {
+              ...panoramaTourConfig.default,
+              firstScene: room.panoramaSceneId,
+              // autoLoad: false is now inherited from config/panoramaTour.ts
+            },
+          }
         : null,
-    [room?.panoramaSceneId, hasPanorama]
+    [room?.panoramaSceneId, hasPanorama],
   );
 
   const roomTeachers = room?.teacherIds
@@ -108,9 +113,7 @@ export function RoomDetailsSidebar({ room, isOpen, onClose, onRouteClick }: Room
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
                 Опис
               </h3>
-              <p className="text-sm leading-relaxed text-foreground/90">
-                {room.description}
-              </p>
+              <p className="text-sm leading-relaxed text-foreground/90">{room.description}</p>
             </div>
           )}
 
@@ -143,11 +146,7 @@ export function RoomDetailsSidebar({ room, isOpen, onClose, onRouteClick }: Room
       {/* Футер: Кнопка маршруту */}
       {onRouteClick && (
         <div className="p-4 border-t bg-background">
-          <Button
-            onClick={onRouteClick}
-            className="w-full gap-2 shadow-sm"
-            size="lg"
-          >
+          <Button onClick={onRouteClick} className="w-full gap-2 shadow-sm" size="lg">
             <Navigation className="w-4 h-4" />
             Побудувати маршрут
           </Button>

@@ -8,16 +8,16 @@ import { AiChatWindow } from './AiChatWindow';
  * Manages chat state and only shows when online
  */
 export function AiChat() {
-    const [isOpen, setIsOpen] = useState(false);
-    const isOnline = useOnlineStatus();
+  const [isOpen, setIsOpen] = useState(false);
+  const isOnline = useOnlineStatus();
 
-    // Don't render if offline
-    if (!isOnline) return null;
+  // Don't render if offline
+  if (!isOnline) return null;
 
-    return (
-        <>
-            <AiChatButton onClick={() => setIsOpen(true)} />
-            <AiChatWindow isOpen={isOpen} onClose={() => setIsOpen(false)} />
-        </>
-    );
+  return (
+    <>
+      <AiChatButton onClick={() => setIsOpen(true)} />
+      <AiChatWindow isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    </>
+  );
 }

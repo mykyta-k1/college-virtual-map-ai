@@ -24,14 +24,12 @@ body,
 
 /* Ensure full height on mobile with dvh */
 @supports (height: 100dvh) {
-
   html,
   body,
   #root {
     height: 100dvh;
   }
 }
-
 
 @layer base {
   :root {

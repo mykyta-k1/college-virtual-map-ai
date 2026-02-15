@@ -115,17 +115,23 @@ export default function MapViewer({
       const endNode = navService.findNodeByRoomId(state.endPoint.id);
 
       if (startNode && endNode) {
-        console.log(`🛣️ Calculating path from ${state.startPoint.label} to ${state.endPoint.label}...`);
+        console.log(
+          `🛣️ Calculating path from ${state.startPoint.label} to ${state.endPoint.label}...`,
+        );
         const path = navService.findPath(startNode.id, endNode.id);
         if (path) {
-          console.log("✅ Route found:", path);
+          console.log('✅ Route found:', path);
           actions.setCurrentPath(path);
         } else {
-          console.warn("❌ Route not found!");
+          console.warn('❌ Route not found!');
           actions.setCurrentPath(null);
         }
       } else {
-        console.warn("⚠️ Cannot find graph nodes for selected rooms:", state.startPoint?.id, state.endPoint?.id);
+        console.warn(
+          '⚠️ Cannot find graph nodes for selected rooms:',
+          state.startPoint?.id,
+          state.endPoint?.id,
+        );
         actions.setCurrentPath(null);
       }
     } else {
@@ -170,8 +176,6 @@ export default function MapViewer({
     actions.enableRouteMode();
   };
 
-
-
   const highlightStyles = useMapHighlights({
     results,
     selectedRoom: state.selectedRoom,
@@ -200,7 +204,10 @@ export default function MapViewer({
 
       {/* SVG Map Container */}
       <TransformWrapper
-        initialScale={1} minScale={0.5} maxScale={4} centerOnInit
+        initialScale={1}
+        minScale={0.5}
+        maxScale={4}
+        centerOnInit
         wheel={{ step: 0.1 }}
         onTransformed={(e) => actions.setScale(e.state.scale)}
         doubleClick={{ disabled: true }}
@@ -253,19 +260,18 @@ export default function MapViewer({
         routeQueryEnd={state.routeQueryEnd}
         results={results}
         activeRouteInput={state.activeRouteInput}
-
         onSearch={search}
         onSearchQueryChange={handleSearchQueryChange}
         onRouteQueryStartChange={actions.setRouteQueryStart}
         onRouteQueryEndChange={actions.setRouteQueryEnd}
         onActiveRouteInputChange={actions.setActiveRouteInput}
-
-        onToggleRouteMode={(enable) => enable ? actions.enableRouteMode() : actions.disableRouteMode()}
+        onToggleRouteMode={(enable) =>
+          enable ? actions.enableRouteMode() : actions.disableRouteMode()
+        }
         onSelectResult={handleSelectResult}
         onClearSearch={handleClearSearch}
         onSwapRoute={actions.swapRoute}
       />
-
 
       {/* Floor Selector */}
       <FloorSelector

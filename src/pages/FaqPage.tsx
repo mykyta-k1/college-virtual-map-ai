@@ -4,9 +4,16 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { HelpCircle, MapPin, ExternalLink, Mail, MessageCircleQuestion, Sparkles } from 'lucide-react';
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import {
+  HelpCircle,
+  MapPin,
+  ExternalLink,
+  Mail,
+  MessageCircleQuestion,
+  Sparkles,
+} from 'lucide-react';
 import { faqData, faqCategories, type FaqCategory } from '@/config/faqConfig';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,16 +22,19 @@ export default function FaqPage() {
   const [openItem, setOpenItem] = useState<string | undefined>(undefined);
 
   // Group FAQ items by category
-  const groupedFaq = Object.keys(faqCategories).reduce((acc, cat) => {
-    const category = cat as FaqCategory;
-    const items = faqData.filter(item => item.category === category);
-    if (items.length > 0) {
-      acc[category] = items;
-    }
-    return acc;
-  }, {} as Record<FaqCategory, typeof faqData>);
+  const groupedFaq = Object.keys(faqCategories).reduce(
+    (acc, cat) => {
+      const category = cat as FaqCategory;
+      const items = faqData.filter((item) => item.category === category);
+      if (items.length > 0) {
+        acc[category] = items;
+      }
+      return acc;
+    },
+    {} as Record<FaqCategory, typeof faqData>,
+  );
 
-  const handleAction = (item: typeof faqData[0]) => {
+  const handleAction = (item: (typeof faqData)[0]) => {
     if (item.mapLocationId) {
       navigate(`/?room=${item.mapLocationId}`);
     } else if (item.externalLink) {
@@ -35,7 +45,10 @@ export default function FaqPage() {
   const FaqList = () => (
     <div className="space-y-12 md:space-y-16 pb-24 md:pb-12 w-full max-w-3xl mx-auto relative z-10">
       {(Object.keys(groupedFaq) as FaqCategory[]).map((category) => (
-        <div key={category} className="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div
+          key={category}
+          className="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-700"
+        >
           {/* Category Header */}
           <div className="flex items-center gap-3 sticky top-4 z-20 w-max">
             <div className="p-2 bg-foreground text-background rounded-xl shadow-lg">
@@ -49,11 +62,17 @@ export default function FaqPage() {
           </div>
 
           {/* Accordion List */}
-          <Accordion type="single" collapsible className="w-full space-y-3" value={openItem} onValueChange={setOpenItem}>
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full space-y-3"
+            value={openItem}
+            onValueChange={setOpenItem}
+          >
             {groupedFaq[category].map((item) => (
-              <AccordionItem 
-                key={item.id} 
-                value={item.id} 
+              <AccordionItem
+                key={item.id}
+                value={item.id}
                 className="border border-border/40 bg-background/60 backdrop-blur-xl rounded-2xl px-2 md:px-4 overflow-hidden transition-all duration-300 data-[state=open]:border-foreground/20 data-[state=open]:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:data-[state=open]:shadow-[0_8px_30px_rgb(255,255,255,0.04)] hover:border-foreground/30"
               >
                 <AccordionTrigger className="text-left text-base md:text-lg font-semibold hover:text-foreground transition-all py-5 hover:no-underline group">
@@ -74,8 +93,10 @@ export default function FaqPage() {
                       >
                         {item.mapLocationId && <MapPin className="w-4 h-4" />}
                         {item.externalLink?.startsWith('mailto:') && <Mail className="w-4 h-4" />}
-                        {item.externalLink && !item.externalLink.startsWith('mailto:') && <ExternalLink className="w-4 h-4" />}
-                        {item.actionLabel || "Детальніше"}
+                        {item.externalLink && !item.externalLink.startsWith('mailto:') && (
+                          <ExternalLink className="w-4 h-4" />
+                        )}
+                        {item.actionLabel || 'Детальніше'}
                       </Button>
                     )}
                   </div>
@@ -90,12 +111,10 @@ export default function FaqPage() {
 
   return (
     <div className="w-full h-[100dvh] flex flex-col bg-background relative overflow-y-auto overflow-x-hidden selection:bg-foreground selection:text-background pb-20">
-      
       {/* 2026 Trend: Subtle Tech Grid Background */}
       <div className="fixed inset-0 pointer-events-none z-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
       <div className="flex-1 w-full max-w-4xl mx-auto p-4 md:p-8 pt-12 md:pt-24 relative z-10">
-        
         {/* Header Section */}
         <div className="text-center space-y-6 mb-16 md:mb-24 animate-in fade-in slide-in-from-top-8 duration-1000">
           <div className="inline-flex items-center justify-center p-2 mb-4 bg-muted/50 rounded-full border border-border/50 backdrop-blur-sm">
@@ -103,13 +122,14 @@ export default function FaqPage() {
               <Sparkles className="w-3 h-3" /> Довідник студента
             </span>
           </div>
-          
+
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-br from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent">
             Гід по коледжу
           </h1>
-          
+
           <p className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-lg mx-auto font-medium">
-            Загубився в коридорах чи шукаєш деканат? Тут ми зібрали всю необхідну інформацію, щоб ти почувався впевнено.
+            Загубився в коридорах чи шукаєш деканат? Тут ми зібрали всю необхідну інформацію, щоб ти
+            почувався впевнено.
           </p>
         </div>
 

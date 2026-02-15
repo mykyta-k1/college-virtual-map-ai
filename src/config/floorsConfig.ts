@@ -90,14 +90,14 @@ export const floorsConfig: FloorData[] = [
         label: '302',
         type: 'classroom',
         description: 'Кабінет історії україни',
-        panoramaSceneId: 'room_302'
+        panoramaSceneId: 'room_302',
       },
       {
         id: 'r1-304',
         label: '304',
         type: 'classroom',
         description: 'Аудиторія',
-        panoramaSceneId: 'room_304'
+        panoramaSceneId: 'room_304',
       },
       {
         id: 'r1-308',
@@ -175,9 +175,15 @@ export const floorsConfig: FloorData[] = [
         label: 'Сходи з ліва',
         type: 'stairs',
         keywords: ['вгору', '2 поверх', 'сходи', 'сходи з ліва'],
-        panoramaSceneId: 'stair_1_left'
+        panoramaSceneId: 'stair_1_left',
       },
-      { id: 'r1-stairs-2', label: 'Сходи біля туалету', type: 'stairs', keywords: ['вихід', 'сходи праві', 'сходи туалет'], panoramaSceneId: 'stair_1_right', },
+      {
+        id: 'r1-stairs-2',
+        label: 'Сходи біля туалету',
+        type: 'stairs',
+        keywords: ['вихід', 'сходи праві', 'сходи туалет'],
+        panoramaSceneId: 'stair_1_right',
+      },
     ],
   },
   {
@@ -304,7 +310,13 @@ export const floorsConfig: FloorData[] = [
         keywords: ['вниз', 'вгору', '1 поверх', '3 поверх'],
         panoramaSceneId: 'stair_2_left',
       },
-      { id: 'r2-stairs-2',keywords: ['вниз', 'вгору', '1 поверх', '3 поверх'], label: 'Сходи', type: 'stairs', panoramaSceneId: 'stair_2_right' },
+      {
+        id: 'r2-stairs-2',
+        keywords: ['вниз', 'вгору', '1 поверх', '3 поверх'],
+        label: 'Сходи',
+        type: 'stairs',
+        panoramaSceneId: 'stair_2_right',
+      },
     ],
   },
   {

@@ -36,12 +36,12 @@ export default function MapPage() {
     const roomId = searchParams.get('room');
     if (roomId) {
       // Find floor for this room
-      const floor = floorsConfig.find(f => f.rooms.some(r => r.id === roomId));
+      const floor = floorsConfig.find((f) => f.rooms.some((r) => r.id === roomId));
       if (floor) {
         setActiveFloorId(floor.id);
 
         // Find the room label to populate search
-        const room = floor.rooms.find(r => r.id === roomId);
+        const room = floor.rooms.find((r) => r.id === roomId);
         if (room) {
           setInitialRoom({ ...room, floorId: floor.id });
         }
@@ -53,15 +53,18 @@ export default function MapPage() {
   }, [searchParams]); // React to URL changes
 
   // Handle room selection - updates URL when sidebar opens with room details
-  const handleRoomSelect = useCallback((room: SearchableRoom | null) => {
-    if (room) {
-      // Room selected - sidebar opening - update URL
-      setSearchParams({ search: room.label }, { replace: true });
-    } else {
-      // Room deselected - sidebar closing - clear URL
-      setSearchParams({}, { replace: true });
-    }
-  }, [setSearchParams]);
+  const handleRoomSelect = useCallback(
+    (room: SearchableRoom | null) => {
+      if (room) {
+        // Room selected - sidebar opening - update URL
+        setSearchParams({ search: room.label }, { replace: true });
+      } else {
+        // Room deselected - sidebar closing - clear URL
+        setSearchParams({}, { replace: true });
+      }
+    },
+    [setSearchParams],
+  );
 
   return (
     <div className="h-full w-full overflow-hidden bg-background relative">
