@@ -20,6 +20,7 @@ interface MapViewerProps {
   onFloorChange: (id: number) => void;
   onRoomSelect?: (room: SearchableRoom | null) => void;
   initialSearchQuery?: string;
+  initialRoom?: SearchableRoom | null;
 }
 
 /**
@@ -31,6 +32,7 @@ export default function MapViewer({
   onFloorChange,
   onRoomSelect,
   initialSearchQuery,
+  initialRoom,
 }: MapViewerProps) {
   // Управління станом
   const { state, actions } = useMapViewerState();
@@ -64,6 +66,18 @@ export default function MapViewer({
       }
     }
   }, [initialSearchQuery, state.selectedRoom, state.searchQuery]);
+
+  // Handle initial room selection (e.g. from ?room=ID URL param)
+  const prevInitialRoom = useRef<string | null>(null);
+  useEffect(() => {
+    if (initialRoom && initialRoom.id !== prevInitialRoom.current) {
+      prevInitialRoom.current = initialRoom.id;
+      // Only select if not already selected to avoid loops/overrides
+      if (!state.selectedRoom || state.selectedRoom.id !== initialRoom.id) {
+        actions.selectRoom(initialRoom);
+      }
+    }
+  }, [initialRoom, state.selectedRoom]);
 
   // Сповіщаємо батьківський компонент про зміну вибраної кімнати
   useEffect(() => {

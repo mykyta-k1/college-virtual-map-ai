@@ -19,6 +19,7 @@ export default function MapPage() {
 
   // State to hold initial search query from URL
   const [initialSearchQuery, setInitialSearchQuery] = useState('');
+  const [initialRoom, setInitialRoom] = useState<SearchableRoom | null>(null);
 
   const activeFloor = floorsConfig.find((f) => f.id === activeFloorId) ?? floorsConfig[0];
 
@@ -42,7 +43,7 @@ export default function MapPage() {
         // Find the room label to populate search
         const room = floor.rooms.find(r => r.id === roomId);
         if (room) {
-          setInitialSearchQuery(room.label);
+          setInitialRoom({ ...room, floorId: floor.id });
         }
       }
     } else {
@@ -70,6 +71,7 @@ export default function MapPage() {
         onFloorChange={setActiveFloorId}
         onRoomSelect={handleRoomSelect}
         initialSearchQuery={initialSearchQuery}
+        initialRoom={initialRoom}
       />
     </div>
   );
