@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { SidebarNav } from './components/layout/SidebarNav';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
+import { AiChat } from './components/ai/AiChat';
 import MapPage from './pages/MapPage';
 import FaqPage from './pages/FaqPage';
 import SupportPage from './pages/SupportPage';
@@ -41,6 +42,9 @@ function App() {
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </main>
+
+        {/* --- AI CHAT (Only visible when online) --- */}
+        <AiChat />
       </div>
     </BrowserRouter>
   );

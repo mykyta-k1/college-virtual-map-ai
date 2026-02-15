@@ -1,8 +1,14 @@
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { Drawer } from 'vaul';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+} from '@/components/ui/drawer';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { SearchableRoom } from '@/lib/search';
-import { getRoomIcon } from './mapUtils';
+import type { SearchableRoom } from '@/services/search.service';
+import { getRoomIcon } from '@/utils/icon.utils';
 import { Button } from '@/components/ui/button';
 import { Navigation, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -17,44 +23,39 @@ interface RoomDetailsSidebarProps {
   room: SearchableRoom | null;
   isOpen: boolean;
   onClose: () => void;
+  onRouteClick?: () => void;
 }
 
-export function RoomDetailsSidebar({ room, isOpen, onClose }: RoomDetailsSidebarProps) {
+export function RoomDetailsSidebar({ room, isOpen, onClose, onRouteClick }: RoomDetailsSidebarProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
-  // Ensure we don't render if no room, BUT for animations/drawer logic we might need to handle presence.
-  // However, the parent controls isOpen.
+  // Якщо кімната не вибрана, не рендеримо нічого (хоча для анімації drawer це може бути нюансом, але батьківський компонент контролює isOpen)
   if (!room) return null;
 
-  // Check if room has a panorama scene
+  // Перевірка наявності панорами для цієї кімнати
   const hasPanorama = room.panoramaSceneId && panoramaTourConfig.scenes[room.panoramaSceneId];
 
-  // Create a modified config for this specific room view
+  // Створення конфігурації для панорами (якщо вона є)
   const roomPanoramaConfig =
     hasPanorama && room.panoramaSceneId
       ? {
-          ...panoramaTourConfig,
-          default: {
-            ...panoramaTourConfig.default,
-            firstScene: room.panoramaSceneId,
-            autoLoad: true,
-          },
-        }
+        ...panoramaTourConfig,
+        default: {
+          ...panoramaTourConfig.default,
+          firstScene: room.panoramaSceneId,
+          autoLoad: true,
+        },
+      }
       : null;
 
-  // Filter teachers for this room
+  // Фільтрація викладачів, закріплених за цією кімнатою
   const roomTeachers = room.teacherIds
     ? teachers.filter((t) => room.teacherIds?.includes(t.id))
     : [];
 
   const Content = (
     <div className="flex flex-col h-full bg-background">
-      {/* Mobile Drawer Handle (Only visible in Drawer) */}
-      {isMobile && (
-        <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-muted mb-2 mt-4" />
-      )}
-
-      {/* Header Image / Icon Area OR Panorama */}
+      {/* Заголовок: Панорама або Іконка */}
       <div className="relative w-full h-56 md:h-64 shrink-0 bg-secondary flex items-center justify-center border-b border-border/50 overflow-hidden">
         {hasPanorama && roomPanoramaConfig ? (
           <div className="absolute inset-0 z-0">
@@ -71,7 +72,7 @@ export function RoomDetailsSidebar({ room, isOpen, onClose }: RoomDetailsSidebar
           </div>
         )}
 
-        {/* Close Button - Different positioning for mobile/desktop if needed */}
+        {/* Кнопка закриття (Тільки десктоп, бо мобільна має свайп) */}
         {!isMobile && (
           <Button
             variant="ghost"
@@ -80,19 +81,19 @@ export function RoomDetailsSidebar({ room, isOpen, onClose }: RoomDetailsSidebar
             onClick={onClose}
           >
             <X className="w-4 h-4" />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">Закрити</span>
           </Button>
         )}
       </div>
 
-      {/* Scrollable Content */}
+      {/* Контент з прокруткою */}
       <ScrollArea className="flex-1">
         <div className="p-6 space-y-6">
-          {/* Title Section */}
+          {/* Секція заголовку */}
           <div>
             <div className="flex items-center justify-between mb-1 gap-4">
               <h2 className="text-2xl font-black leading-tight">{room.label}</h2>
-              {/* Room Type Badge if not in header/panorama */}
+              {/* Бейдж поверху, якщо він не відображений в хедері (наприклад, коли є панорама) */}
               {hasPanorama && (
                 <span className="shrink-0 text-xs font-bold uppercase tracking-widest text-muted-foreground bg-secondary/50 px-2 py-1 rounded">
                   {room.floorId} Поверх
@@ -107,7 +108,7 @@ export function RoomDetailsSidebar({ room, isOpen, onClose }: RoomDetailsSidebar
           <div className="h-px w-full bg-border/50" />
 
           <div className="space-y-6">
-            {/* Teachers Section */}
+            {/* Секція викладачів */}
             {roomTeachers.length > 0 && (
               <div className="space-y-2">
                 <h3 className="text-xs font-bold uppercase text-muted-foreground tracking-wider flex items-center gap-2 pl-2">
@@ -121,7 +122,7 @@ export function RoomDetailsSidebar({ room, isOpen, onClose }: RoomDetailsSidebar
               </div>
             )}
 
-            {/* Keywords / Tags */}
+            {/* Ключові слова */}
             {room.keywords && room.keywords.length > 0 && (
               <div className="space-y-2">
                 <h3 className="text-xs font-bold uppercase text-muted-foreground tracking-wider">
@@ -137,15 +138,17 @@ export function RoomDetailsSidebar({ room, isOpen, onClose }: RoomDetailsSidebar
               </div>
             )}
 
-            {/* Note */}
+            {/* Примітки */}
             {room.note && <NoteItem text={room.note} />}
           </div>
         </div>
       </ScrollArea>
 
-      {/* Footer Actions */}
-      <div className="p-4 border-t border-border bg-background shrink-0">
-        <Button className="w-full gap-2 text-base font-bold h-12 rounded-xl shadow-lg shadow-primary/20">
+      <div className="p-4 border-t border-border bg-background shrink-0 pb-safe">
+        <Button
+          className="w-full gap-2 text-base font-bold h-12 rounded-xl shadow-lg shadow-primary/20"
+          onClick={onRouteClick}
+        >
           <Navigation className="w-4 h-4" />
           Прокласти маршрут
         </Button>
@@ -153,21 +156,27 @@ export function RoomDetailsSidebar({ room, isOpen, onClose }: RoomDetailsSidebar
     </div>
   );
 
-  // Render Drawer for Mobile
+  // Рендер шторки для мобільних
   if (isMobile) {
     return (
-      <Drawer.Root open={isOpen} onOpenChange={(open) => !open && onClose()} shouldScaleBackground>
-        <Drawer.Portal>
-          <Drawer.Overlay className="fixed inset-0 bg-black/40 z-50" />
-          <Drawer.Content className="bg-background flex flex-col rounded-t-[10px] h-[85vh] mt-24 fixed bottom-0 left-0 right-0 z-50 outline-none">
-            {Content}
-          </Drawer.Content>
-        </Drawer.Portal>
-      </Drawer.Root>
+      <Drawer shouldScaleBackground open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <DrawerContent className="h-[85vh] outline-none">
+          {/* Accessible Handle Area */}
+          <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-muted my-4 cursor-grab active:cursor-grabbing" />
+
+          {/* Drawer Header (Required for accessibility, but can be visually hidden if needed) */}
+          <DrawerHeader className="sr-only">
+            <DrawerTitle>{room.label}</DrawerTitle>
+            <DrawerDescription>Деталі кімнати та навігація</DrawerDescription>
+          </DrawerHeader>
+
+          {Content}
+        </DrawerContent>
+      </Drawer>
     );
   }
 
-  // Render Sheet for Desktop
+  // Рендер бокової панелі для десктопу
   return (
     <Sheet modal={false} open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent

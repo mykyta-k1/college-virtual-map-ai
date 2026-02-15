@@ -1,8 +1,8 @@
 import { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import type { FuseResult } from 'fuse.js';
-import type { SearchableRoom } from '@/lib/search';
-import { getRoomIcon } from './mapUtils';
+import type { SearchableRoom } from '@/services/search.service';
+import { getRoomIcon } from '@/utils/icon.utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface SearchDropdownProps {
@@ -17,14 +17,8 @@ export function SearchDropdown({ results, onSelect, isVisible, onClose }: Search
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // Check if click is outside the dropdown
-      // Note: We might need to handle the input field separately if it's not part of this component
-      // But usually the input has its own click handler or we rely on blur?
-      // Actually, if we click the input, we don't want to close it immediately if we want to keep typing.
-      // But here we are checking if click is outside the dropdown REF.
+      // Перевірка кліку поза межами дропдауну
       if (ref.current && !ref.current.contains(event.target as Node)) {
-        // If the click target is NOT the search input (we can't easily check that here without passing a ref to it)
-        // A common pattern is to just close it. If they click input, onFocus/onClick on input will open it again.
         onClose();
       }
     };
@@ -44,7 +38,7 @@ export function SearchDropdown({ results, onSelect, isVisible, onClose }: Search
     <div
       ref={ref}
       className={cn(
-        'absolute top-14 left-0 right-0 bg-background/95 backdrop-blur-md rounded-xl border border-border/50 shadow-xl overflow-hidden z-30 animate-in fade-in zoom-in-95 duration-200',
+        'absolute top-2 left-0 right-0 bg-background/95 backdrop-blur-md rounded-xl border border-border/50 shadow-xl overflow-hidden z-30 animate-in fade-in zoom-in-95 duration-200',
       )}
     >
       <ScrollArea className="h-auto max-h-[60vh]">
@@ -55,12 +49,12 @@ export function SearchDropdown({ results, onSelect, isVisible, onClose }: Search
               onClick={() => onSelect(item)}
               className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left group"
             >
-              {/* Icon Container */}
+              {/* Контейнер іконки */}
               <div className="flex-shrink-0 p-2 bg-secondary/50 rounded-md group-hover:bg-background transition-colors">
                 {getRoomIcon(item.type, 'w-5 h-5')}
               </div>
 
-              {/* Text Content */}
+              {/* Текстовий контент */}
               <div className="flex flex-col min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-bold text-sm truncate text-foreground">{item.label}</span>

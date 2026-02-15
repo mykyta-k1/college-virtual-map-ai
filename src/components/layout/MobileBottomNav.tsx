@@ -76,6 +76,7 @@ export function MobileBottomNav() {
 
           <DrawerContent>
             <div className="mx-auto w-full max-w-sm">
+              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-muted my-4 cursor-grab active:cursor-grabbing" />
               <DrawerHeader className="mb-4">
                 <DrawerTitle className="text-left text-2xl font-bold flex items-center gap-2">
                   <Info className="w-6 h-6" />
@@ -83,6 +84,7 @@ export function MobileBottomNav() {
                 </DrawerTitle>
               </DrawerHeader>
 
+              {/* Menu Items */}
               <div className="flex flex-col gap-3 px-4 pb-8">
                 {menuItems.map((item) => (
                   <Link to={item.to} key={item.to} onClick={() => setIsOpen(false)}>
@@ -92,7 +94,7 @@ export function MobileBottomNav() {
                     >
                       <div className="flex items-center gap-3">
                         {item.icon}
-                        <span>{item.label}</span>
+                        <span className="font-medium">{item.label}</span>
                       </div>
                       <ChevronRight className="w-5 h-5 text-muted-foreground" />
                     </Button>
