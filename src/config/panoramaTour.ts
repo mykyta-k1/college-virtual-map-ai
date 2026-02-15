@@ -26,7 +26,7 @@ const panoramaTourConfig: PanoramaTourConfig = {
     hall_1_2: {
       title: 'Холл 1-го поверху (Вхід)',
       type: 'equirectangular',
-      panorama: '/panoramas/floor1/h1_2.webp',
+      panorama: '/panoramas/floor1/hall_360.webp',
       hotSpots: [{ type: 'scene', text: 'До центру', sceneId: 'hall_1_1', pitch: 0, yaw: 180 }],
     },
     hall_1_2_2: {
@@ -36,23 +36,59 @@ const panoramaTourConfig: PanoramaTourConfig = {
       hotSpots: [],
     },
     wc_1: {
-      title: 'Вбиральня (1 поверх)',
+      title: 'Вбиральня Жіноча (1 поверх)',
       type: 'equirectangular',
       panorama: '/panoramas/floor1/wc.webp',
       hotSpots: [],
     },
+    wc_2: {
+      title: 'Вбиральня Чоловіча (1 поверх)',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor1/wc.webp',
+      hotSpots: [],
+    },
+    stair_1_right: {
+      title: 'Сходи з права',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor1/h1_2.webp',
+      hotSpots: [],
+    },
+    stair_1_left:{
+      title: 'Сходи з ліва',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor1/h1_1.webp',
+      hotSpots: [],
+    },
 
     // Classrooms
+    room_300: {
+      title: 'Аудиторія 300',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor1/c301_c300.webp',
+      hotSpots: [],
+    },
     room_301: {
       title: 'Аудиторія 301',
       type: 'equirectangular',
       panorama: '/panoramas/floor1/c301_c300.webp',
       hotSpots: [],
     },
+    room_302: {
+      title: 'Аудиторія 302',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor1/c303_c302.webp',
+      hotSpots: [],
+    },
     room_303: {
       title: 'Аудиторія 303 (Медпункт)',
       type: 'equirectangular',
       panorama: '/panoramas/floor1/c303_c302.webp',
+      hotSpots: [],
+    },
+    room_304: {
+      title: 'Аудиторія 304',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor1/c307_c304.webp',
       hotSpots: [],
     },
     room_305: {
@@ -62,7 +98,7 @@ const panoramaTourConfig: PanoramaTourConfig = {
       hotSpots: [],
     },
     room_307: {
-      title: 'Аудиторія 307 (Бухгалтерія)',
+      title: 'Аудиторія 307',
       type: 'equirectangular',
       panorama: '/panoramas/floor1/c307_c304.webp',
       hotSpots: [],
@@ -162,6 +198,18 @@ const panoramaTourConfig: PanoramaTourConfig = {
       panorama: '/panoramas/floor2/c324.webp',
       hotSpots: [],
     },
+    room_325: {
+      title: 'Аудиторія 325',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor2/c316_c325.webp',
+      hotSpots: [],
+    },
+    room_326: {
+      title: 'Аудиторія 326',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor3/c333_c326.webp',
+      hotSpots: [],
+    },
     room_328: {
       title: 'Аудиторія 328',
       type: 'equirectangular',
@@ -169,6 +217,18 @@ const panoramaTourConfig: PanoramaTourConfig = {
       hotSpots: [],
     },
 
+      stair_2_right: {
+      title: 'Сходи з права',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor2/h2_3_1.webp',
+      hotSpots: [],
+    },
+    stair_2_left:{
+      title: 'Сходи з ліва',
+      type: 'equirectangular',
+      panorama: '/panoramas/floor2/h2.webp',
+      hotSpots: [],
+    },
     /* ==================== FLOOR 3 ==================== */
     // Classrooms
     room_333: {
