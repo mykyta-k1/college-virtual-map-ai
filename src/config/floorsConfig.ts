@@ -159,6 +159,7 @@ export const floorsConfig: FloorData[] = [
         description: 'Буфет',
         keywords: ['кава', 'їжа', 'булочки', 'вода'],
         note: 'Працює до 16:00',
+        panoramaSceneId: 'cafe_hall',
       },
       {
         id: 'r1-entrance',
@@ -378,6 +379,7 @@ export const floorsConfig: FloorData[] = [
         keywords: ['pc', "комп'ютерний клас", 'лабораторна'],
         note: 'Обережно!',
         teacherIds: ['t5'],
+        panoramaSceneId: 'room_349',
       },
 
       // --- Нижній ряд (326 - 342) ---

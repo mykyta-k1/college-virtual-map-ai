@@ -14,7 +14,7 @@ export default function SettingsPage() {
         <section className="bg-card border rounded-xl p-4 shadow-sm">
           <h2 className="text-lg font-semibold mb-3 border-b pb-2">Зовнішній вигляд</h2>
           <div className="flex items-center justify-between">
-            <span className="text-sm">Темна тема</span>
+            <span className="text-sm">Колір теми</span>
             <ThemeToggle />
           </div>
         </section>

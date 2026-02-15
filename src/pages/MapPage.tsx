@@ -45,9 +45,6 @@ export default function MapPage() {
           setInitialSearchQuery(room.label);
         }
       }
-    } else {
-      // No URL params - clear initial search
-      setInitialSearchQuery('');
     }
   }, [searchParams]); // React to URL changes
 
