@@ -49,9 +49,11 @@ export function SidebarNav() {
           {isExpanded ? (
             <>
               <div className="flex items-center gap-2 overflow-hidden">
-                <div className="bg-primary text-primary-foreground p-1 rounded-md font-bold text-xs flex-shrink-0">
-                  VK
-                </div>
+                <img
+                  src="/icon.svg"
+                  alt="Logo"
+                  className="w-8 h-8 rounded-md flex-shrink-0 object-contain"
+                />
                 <span className="font-semibold text-sm truncate">Віртуальний Коледж</span>
               </div>
               <Button
