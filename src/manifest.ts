@@ -1,9 +1,9 @@
 import type { ManifestOptions } from 'vite-plugin-pwa';
 
 export const manifest: Partial<ManifestOptions> = {
-  name: 'College Navigator',
-  short_name: 'Navigator',
-  description: 'Навігація та розклад для студентів коледжу',
+  name: 'Digital college map',
+  short_name: 'College map',
+  description: 'Інтерактивна платформа навігації коледжом',
   theme_color: '#ffffff',
   background_color: '#ffffff',
   display: 'standalone',
