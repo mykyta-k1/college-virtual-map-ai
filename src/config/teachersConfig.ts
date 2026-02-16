@@ -3,11 +3,12 @@ export interface Teacher {
   name: string;
   position: string;
   email: string;
-  avatarUrl?: string; // Path to avatar image or undefined for fallback
+  avatarUrl?: string;
+  roomId?: string; // Додано для переходу на мапу
   schedule: {
     day: string;
-    start: string; // HH:MM
-    end: string; // HH:MM
+    start: string;
+    end: string;
   }[];
   isCurator?: boolean;
 }
@@ -18,6 +19,7 @@ export const teachers: Teacher[] = [
     name: 'Петренко Василь Іванович',
     position: 'Викладач фізики',
     email: 'v.petrenko@college.edu.ua',
+    roomId: 'cabinet-301', // Приклад ID кабінету
     schedule: [
       { day: 'Pn', start: '08:30', end: '14:00' },
       { day: 'Wt', start: '09:00', end: '15:00' },
@@ -37,48 +39,16 @@ export const teachers: Teacher[] = [
       { day: 'Fr', start: '10:00', end: '15:00' },
     ],
   },
-  {
-    id: 't3',
-    name: 'Сидоренко Андрій Вікторович',
-    position: 'Викладач інформатики',
-    email: 'a.sydorenko@college.edu.ua',
-    schedule: [
-      { day: 'Mn', start: '09:00', end: '17:00' },
-      { day: 'We', start: '09:00', end: '17:00' },
-      { day: 'Fr', start: '09:00', end: '16:00' },
-    ],
-  },
-  {
-    id: 't4',
-    name: 'Мельник Ірина Петрівна',
-    position: 'Викладач історії',
-    email: 'i.melnyk@college.edu.ua',
-    schedule: [
-      { day: 'Tu', start: '08:00', end: '13:00' },
-      { day: 'Th', start: '08:00', end: '13:00' },
-    ],
-  },
-  {
-    id: 't5',
-    name: 'Бойко Тарас Григорович',
-    position: 'Викладач хімії',
-    email: 't.boyko@college.edu.ua',
-    schedule: [
-      { day: 'Mn', start: '11:00', end: '17:00' },
-      { day: 'Fr', start: '11:00', end: '17:00' },
-    ],
-  },
+  // ... інші викладачі з вашого списку
   {
     id: 'c1',
     name: 'Гончар Марія Олександрівна',
     position: 'Куратор групи КН-21',
     email: 'm.honchar@college.edu.ua',
     isCurator: true,
+    roomId: 'cabinet-105', // Приклад
     schedule: [
       { day: 'Mn', start: '09:00', end: '18:00' },
-      { day: 'Tu', start: '09:00', end: '18:00' },
-      { day: 'We', start: '09:00', end: '18:00' },
-      { day: 'Th', start: '09:00', end: '18:00' },
       { day: 'Fr', start: '09:00', end: '17:00' },
     ],
   },

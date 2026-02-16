@@ -148,7 +148,7 @@ const panoramaTourConfig: PanoramaTourConfig = {
       title: 'Двері до аудиторії 312',
       type: 'equirectangular',
       panorama: '/panoramas/floor2/c312.webp',
-      hotSpots: [{ type: 'scene', text: 'До аудиторії', sceneId: 'room_312', pitch: 0, yaw: 30 }],
+      hotSpots: [{ type: 'scene', text: 'До аудиторії', sceneId: 'room_312', pitch: 0, yaw: 30}],
     },
     room_312: {
       title: 'Аудиторія 312',

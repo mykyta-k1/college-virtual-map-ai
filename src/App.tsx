@@ -6,6 +6,7 @@ import MapPage from './pages/MapPage';
 import FaqPage from './pages/FaqPage';
 import SupportPage from './pages/SupportPage';
 import SettingsPage from './pages/SettingsPage';
+import TeacherPage from './pages/TeacherPage';
 
 /**
  * Кореневий компонент додатку.
@@ -40,6 +41,7 @@ function App() {
             <Route path="/faq" element={<FaqPage />} />
             <Route path="/support" element={<SupportPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/teachers" element={<TeacherPage />} />
           </Routes>
         </main>
 

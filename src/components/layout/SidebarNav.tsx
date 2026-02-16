@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Menu, Map, HelpCircle, X, MessageSquare, Settings } from 'lucide-react';
+import { Menu, Map, HelpCircle, X, MessageSquare, Settings, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SimpleTooltip } from '@/components/ui/simple-tooltip';
 import { cn } from '@/lib/utils';
@@ -17,6 +17,7 @@ export function SidebarNav() {
   // Main Navigation Items
   const navItems = [
     { id: 'home', label: 'Мапа', to: '/', icon: <Map className="w-5 h-5 flex-shrink-0" /> },
+    { id: 'teachers', label: 'Хто ви?', to: '/teachers', icon: <GraduationCap className="w-5 h-5 flex-shrink-0" /> }, // Доданий рядок
     { id: 'faq', label: 'FAQ', to: '/faq', icon: <HelpCircle className="w-5 h-5 flex-shrink-0" /> },
     {
       id: 'support',
