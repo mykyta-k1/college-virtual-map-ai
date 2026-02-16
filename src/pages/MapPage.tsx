@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { floorsConfig } from '@/config/floorsConfig';
 import MapViewer from '@/components/map/MapViewer';
 import type { SearchableRoom } from '@/services/search.service';
+import { SearchService } from '@/services/search.service';
 
 /**
  * Сторінка "Мапа" — основний компонент.
@@ -25,9 +26,42 @@ export default function MapPage() {
 
   // Process URL parameters - reactive to changes
   useEffect(() => {
-    // Check for direct search parameter first (from AI chat or shared link)
+    // Перевірка параметру search (наприклад, перехід з AI чату або посилання)
     const searchQuery = searchParams.get('search');
     if (searchQuery) {
+      // Ініціалізуємо сервіс пошуку для знаходження кімнати
+      const searchService = new SearchService(floorsConfig);
+      const results = searchService.search(searchQuery);
+
+      if (results.length > 0) {
+        const bestMatch = results[0].item;
+
+        // Перевіряємо на точний збіг (наприклад "312" == "312")
+        const isExactMatch = bestMatch.label.toLowerCase() === searchQuery.toLowerCase();
+
+        if (isExactMatch) {
+          // ТОЧНИЙ ЗБІГ: Вважаємо це прямою навігацією (як клік по кнопці в AI)
+
+          // 1. Перемикаємо поверх, якщо кімната на іншому
+          if (bestMatch.floorId) setActiveFloorId(bestMatch.floorId);
+
+          // 2. Вибираємо кімнату (активує синє виділення + сайдбар)
+          setInitialRoom(bestMatch);
+
+          // 3. Очищаємо пошуковий запит, щоб прибрати зелене виділення "результату пошуку"
+          setInitialSearchQuery('');
+          return;
+        }
+
+        // ЧАСТКОВИЙ ЗБІГ: Просто допомагаємо користувачу знайти
+        // Перемикаємо на поверх з найкращим результатом
+        if (bestMatch.floorId) {
+          setActiveFloorId(bestMatch.floorId);
+        }
+        // Не вибираємо кімнату автоматично (вона буде підсвічена зеленим через пошук)
+      }
+
+      // Встановлюємо пошуковий запит (активує зелене виділення для всіх результатів)
       setInitialSearchQuery(searchQuery);
       return;
     }
