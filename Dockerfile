@@ -27,8 +27,8 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # Копіюємо кастомний конфіг Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Відкриваємо порт 80
-EXPOSE 9002
+# Відкриваємо порт 80 що слухає Nginx
+EXPOSE 80
 
 # Запускаємо Nginx
 CMD ["nginx", "-g", "daemon off;"]

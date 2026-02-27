@@ -8,7 +8,7 @@ services:
     container_name: college-virtual-map-frontend
     restart: unless-stopped
     ports:
-      - "80:9002"
+      - "9002:80"
     # Для логування
     logging:
       driver: "json-file"
