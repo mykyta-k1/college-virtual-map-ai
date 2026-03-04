@@ -5,12 +5,10 @@
  */
 
 export const aiConfig = {
-  // Cloudflare Worker AI endpoint
-  workerUrl: import.meta.env.VITE_AI_WORKER_URL || '',
+  // Use local relative proxy path rather than absolute URL
+  workerUrl: '/api/ai/chat',
 
-  // API Key for authentication
-  apiKey: import.meta.env.VITE_AI_API_KEY || '',
-
-  // Check if AI is enabled (both URL and key must be present)
-  isEnabled: Boolean(import.meta.env.VITE_AI_WORKER_URL && import.meta.env.VITE_AI_API_KEY),
+  // Assume enabled since we do not expose secrets to the browser
+  // A healthier check would be an explicit VITE_FEATURE_AI=true if we need to toggle it
+  isEnabled: true,
 };

@@ -24,8 +24,8 @@ FROM nginx:1.27-alpine
 # Копіюємо зібрані файли з попереднього етапу
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Копіюємо кастомний конфіг Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Копіюємо кастомний конфіг Nginx як шаблон для підтримки environment variables
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 # Відкриваємо порт 80 що слухає Nginx
 EXPOSE 80

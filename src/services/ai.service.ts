@@ -19,7 +19,7 @@ interface AiWorkerRequest {
 export class AiService {
   private static instance: AiService;
 
-  private constructor() {}
+  private constructor() { }
 
   static getInstance(): AiService {
     if (!AiService.instance) {
@@ -32,10 +32,8 @@ export class AiService {
    * Send a message to the AI worker and get response
    */
   async sendMessage(message: string): Promise<AiWorkerResponse> {
-    if (!aiConfig.workerUrl || !aiConfig.apiKey) {
-      throw new Error(
-        'AI Worker not configured. Please set VITE_AI_WORKER_URL and VITE_AI_API_KEY',
-      );
+    if (!aiConfig.workerUrl) {
+      throw new Error('AI Worker URL not configured.');
     }
 
     const request: AiWorkerRequest = { message };
@@ -44,7 +42,6 @@ export class AiService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': `${aiConfig.apiKey}`,
       },
       body: JSON.stringify(request),
     });

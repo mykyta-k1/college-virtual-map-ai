@@ -53,7 +53,7 @@ npm install
 
 ```env
 # URL зовнішнього сервісу AI Worker (для роботи чат-бота)
-VITE_AI_WORKER_URL=https://your-ai-worker-service.com/api/chat
+VITE_AI_WORKER_BASE_URL=https://your-ai-worker-service.com/api/chat
 
 # API ключ для доступу до AI сервісу
 VITE_AI_API_KEY=your_secure_api_key
@@ -62,7 +62,7 @@ VITE_AI_API_KEY=your_secure_api_key
 VITE_SUPPORT_EMAIL=support@college-map.ai
 ```
 
-> ⚠️ **Важливо:** Без валідних `VITE_AI_WORKER_URL` та `VITE_AI_API_KEY` функціонал AI чату буде недоступний або працюватиме некоректно. AI чат реалізований як відокремлений мікросервіс без підтримки стрімінгу.
+> ⚠️ **Важливо:** Без валідних `VITE_AI_WORKER_BASE_URL` та `VITE_AI_API_KEY` функціонал AI чату буде недоступний або працюватиме некоректно. AI чат реалізований як відокремлений мікросервіс без підтримки стрімінгу.
 
 ### 4. Запуск у режимі розробки
 ```bash

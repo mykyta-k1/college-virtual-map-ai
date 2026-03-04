@@ -3049,13 +3049,13 @@ export const useTheme = () => {
 
 export const aiConfig = {
   // Cloudflare Worker AI endpoint
-  workerUrl: import.meta.env.VITE_AI_WORKER_URL || '',
+  workerUrl: import.meta.env.VITE_AI_WORKER_BASE_URL || '',
 
   // API Key for authentication
   apiKey: import.meta.env.VITE_AI_API_KEY || '',
 
   // Check if AI is enabled (both URL and key must be present)
-  isEnabled: Boolean(import.meta.env.VITE_AI_WORKER_URL && import.meta.env.VITE_AI_API_KEY),
+  isEnabled: Boolean(import.meta.env.VITE_AI_WORKER_BASE_URL && import.meta.env.VITE_AI_API_KEY),
 };
 </file>
 
@@ -4805,7 +4805,7 @@ export class AiService {
   async sendMessage(message: string): Promise<AiWorkerResponse> {
     if (!aiConfig.workerUrl || !aiConfig.apiKey) {
       throw new Error(
-        'AI Worker not configured. Please set VITE_AI_WORKER_URL and VITE_AI_API_KEY',
+        'AI Worker not configured. Please set VITE_AI_WORKER_BASE_URL and VITE_AI_API_KEY',
       );
     }
 
@@ -4909,7 +4909,7 @@ export const manifest: Partial<ManifestOptions> = {
 
 <file path=".env.example">
 VITE_SUPPORT_EMAIL=support@college-map.ai
-VITE_AI_WORKER_URL=https://colleage-example-ai
+VITE_AI_WORKER_BASE_URL=https://colleage-example-ai
 VITE_AI_API_KEY=your_very_encrypted_secret
 </file>
 
@@ -8205,7 +8205,7 @@ npm install
 
 ```env
 # URL зовнішнього сервісу AI Worker (для роботи чат-бота)
-VITE_AI_WORKER_URL=https://your-ai-worker-service.com/api/chat
+VITE_AI_WORKER_BASE_URL=https://your-ai-worker-service.com/api/chat
 
 # API ключ для доступу до AI сервісу
 VITE_AI_API_KEY=your_secure_api_key
@@ -8214,7 +8214,7 @@ VITE_AI_API_KEY=your_secure_api_key
 VITE_SUPPORT_EMAIL=support@college-map.ai
 ```
 
-> ⚠️ **Важливо:** Без валідних `VITE_AI_WORKER_URL` та `VITE_AI_API_KEY` функціонал AI чату буде недоступний або працюватиме некоректно. AI чат реалізований як відокремлений мікросервіс без підтримки стрімінгу.
+> ⚠️ **Важливо:** Без валідних `VITE_AI_WORKER_BASE_URL` та `VITE_AI_API_KEY` функціонал AI чату буде недоступний або працюватиме некоректно. AI чат реалізований як відокремлений мікросервіс без підтримки стрімінгу.
 
 ### 4. Запуск у режимі розробки
 ```bash
