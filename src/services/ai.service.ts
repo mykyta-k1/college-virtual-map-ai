@@ -19,7 +19,7 @@ interface AiWorkerRequest {
 export class AiService {
   private static instance: AiService;
 
-  private constructor() { }
+  private constructor() {}
 
   static getInstance(): AiService {
     if (!AiService.instance) {
